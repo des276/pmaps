@@ -6,3 +6,9 @@ body {
 a {
   color: #00B7FF;
 }
+
+#object_container {
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+}
