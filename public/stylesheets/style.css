@@ -11,4 +11,19 @@ a {
 	border-color: black;
 	border-width: 2px;
 	border-style: solid;
+	width: auto;
+	height: 500px;
 }
+
+/*Test shit from interact.js*/
+#grid-snap {
+  width: 40px;
+  height: 40px;
+  background-color: #29e;
+  color: #fff;
+  font-size: 1.2em;
+  border-radius: 4px;
+  padding: 2%;
+  margin: 5%;
+}
+<% end %>
