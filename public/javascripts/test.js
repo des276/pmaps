@@ -1,11 +1,19 @@
+// // New function
+// $(function() {
+
+// 	var element = document
+
+// });
+
+// // Old function
 $(function() {
 // alert('hi');
 
 	// Test shit from interact.js
-	var element = document.getElementById('grid-snap'),
+	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
 
-	interact(element)
+	interact('.draggable')
 	  .draggable({
 	    snap: {
 	      targets: [
@@ -14,7 +22,7 @@ $(function() {
 	      range: Infinity,
 	      relativePoints: [ { x: 0, y: 0 } ]
 	    },
-	    inertia: true,
+	    // inertia: true,
 	    restrict: {
 	      restriction: element.parentNode,
 	      elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
@@ -30,4 +38,3 @@ $(function() {
 	        'translate(' + x + 'px, ' + y + 'px)';
 	  });
 });
-

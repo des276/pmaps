@@ -16,7 +16,7 @@ a {
 }
 
 /*Test shit from interact.js*/
-#grid-snap {
+.draggable {
   width: 40px;
   height: 40px;
   background-color: #29e;
