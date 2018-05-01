@@ -1,15 +1,10 @@
-// // New function
-// $(function() {
-
-// 	var element = document
-
-// });
-
-// // Old function
+// Element movement
+// To dos:
+// 1) Make sure elements stay within bounds of parent
+// 2) Fix weird behavior; elements sometimes jumping away from cursor
 $(function() {
 // alert('hi');
 
-	// Test shit from interact.js
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
 
@@ -22,7 +17,6 @@ $(function() {
 	      range: Infinity,
 	      relativePoints: [ { x: 0, y: 0 } ]
 	    },
-	    // inertia: true,
 	    restrict: {
 	      restriction: element.parentNode,
 	      elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
