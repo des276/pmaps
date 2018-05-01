@@ -20,7 +20,9 @@ a {
   height: 40px;
   background-color: #29e;
   color: #fff;
-  font-size: 1.2em;
+  font-size: 0.8em;
+  text-align: center;
+  display: inline-block; /* I don't know why but this makes the elements stack horizontally at start... Which is nice I guess */
   border-radius: 4px;
   padding: 2%;
   margin: 5%;
