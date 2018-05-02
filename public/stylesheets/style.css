@@ -22,6 +22,7 @@ a {
   z-index: 999;
   width: 100%;
 }
+
 #object_container_overlay:after {
   content: '';
   position: absolute;
@@ -38,11 +39,15 @@ a {
 
 /*Test shit from interact.js*/
 #grid-snap {
+=======
+.draggable {
   width: 40px;
   height: 40px;
   background-color: #29e;
   color: #fff;
-  font-size: 1.2em;
+  font-size: 0.8em;
+  text-align: center;
+  display: inline-block; /* I don't know why but this makes the elements stack horizontally at start... Which is nice I guess */
   border-radius: 4px;
   padding: 2%;
   margin: 5%;
