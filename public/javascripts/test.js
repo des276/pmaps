@@ -7,7 +7,6 @@ $(function() {
 
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
-	    console.log(element);
 
 	interact('.draggable')
 		.draggable({
@@ -19,7 +18,7 @@ $(function() {
 				relativePoints: [ { x: 0, y: 0 } ]
 			},
 			restrict: {
-		  		restriction: element.parentNode,
+		  		restriction: 'parent',
 	  			elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
 		  		endOnly: true
 			}
@@ -45,6 +44,7 @@ $(function() {
 			// event.target.style.webkitTransform =
 			// event.target.style.transform =
 			//     'translate(' + x + 'px, ' + y + 'px)';
+		console.log(element);
 		});
 
 	/**
