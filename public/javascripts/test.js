@@ -29,5 +29,22 @@ $(function() {
 	    event.target.style.transform =
 	        'translate(' + x + 'px, ' + y + 'px)';
 	  });
+
+	/**
+		param: id (string)
+	**/
+	function getContainerWidth(elName){
+		return $('#' + elName).width();
+	}
+
+	/**
+		param:  id (string)
+	**/
+	function getContainerHeight(elName){
+		return $('#' + elName).height();
+	}
+
+	console.log('width: ' + getContainerWidth('object_container'));
+	console.log('height: ' + getContainerHeight('object_container'));
 });
 
