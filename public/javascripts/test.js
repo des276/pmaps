@@ -11,11 +11,11 @@ $(function() {
 	interact('.draggable')
 		.draggable({
 			snap: {
-		  		targets: [
-		    		interact.createSnapGrid({ x: 30, y: 30 })
-				],
-			  	range: Infinity,
-				relativePoints: [ { x: 0, y: 0 } ]
+				mode: 'anchor',
+				anchors: [],
+				range: Infinity,
+				elementOrigin: { x: 0.5, y: 0.5 },
+				endOnly: true
 			},
 			restrict: {
 		  		restriction: 'parent',
