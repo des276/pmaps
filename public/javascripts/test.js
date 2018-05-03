@@ -39,6 +39,34 @@ $(function() {
 	    target.setAttribute('data-y', y);
 		});
 
+	interact('.dropzone')
+		.dropzone({
+			overlap: 0.2,
+			ondragenter: function(event){
+				var dropRect = interact.getElementRect(event.target),
+		        dropCenter = {
+		          x: dropRect.left + dropRect.width  / 2,
+		          y: dropRect.top  + dropRect.height / 2
+		        };
+
+			    event.draggable.draggable({
+			    	snap: {targets: [dropCenter]}
+			    });
+			    console.log(dropCenter);
+				console.log(event.draggable.draggable());
+			},
+			ondragleave: function(event){
+				event.draggable.draggable({
+					snap: false
+				});
+			}
+		});
+
+//   .on('dragleave', function (event) {
+    // event.draggable.snap(false);
+  // });
+
+
 	/**
 		param: id (string)
 	**/
