@@ -52,6 +52,14 @@ a {
   margin: 5%;
   /*position: absolute;*/
 }
+
+.dropzone {
+	width: 80px;
+	height: 80px;
+	border: 10px dotted;
+	color: white;
+}
+
 <% end %>
 
 

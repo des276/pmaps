@@ -37,14 +37,6 @@ $(function() {
 	    // update the posiion attributes
 	    target.setAttribute('data-x', x);
 	    target.setAttribute('data-y', y);
-			// console.log(event);
-			// x += event.dx;
-			// y += event.dy;
-
-			// event.target.style.webkitTransform =
-			// event.target.style.transform =
-			//     'translate(' + x + 'px, ' + y + 'px)';
-		console.log(element);
 		});
 
 	/**
