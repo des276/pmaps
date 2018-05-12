@@ -3,7 +3,10 @@
 // 1) Make sure elements stay within bounds of parent
 // 2) Fix weird behavior; elements sometimes jumping away from cursor
 $(function() {
-// alert('hi');
+	//add svg element before attaching interact.js handlers
+	var svg = d3.select('svg');
+	var arc = d3.symbol().type(d3.symbolTriangle);
+
 
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
@@ -11,10 +14,6 @@ $(function() {
 	interact('.draggable')
 		.draggable({
 			snap: {
-				// mode: 'anchor',
-				// anchors: [],
-				// range: Infinity,
-				// elementOrigin: { x: 0.5, y: 0.5 },
 				relativePoints: [{x: 0.5, y:0.5}],
 				endOnly: true
 			},
@@ -26,7 +25,6 @@ $(function() {
 			inertia: false
 		})
 		.on('dragmove', function (event) {
-			// console.log(event);
 			var target = event.target,
 	        // keep the dragged position in the data-x/data-y attributes
 	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -57,15 +55,10 @@ $(function() {
 		          y: dropRect.top  + dropRect.height / 2
 		        };
 
-		        // dropCenter.x = 400
 		        ;
 			    event.draggable.draggable({
 			    	snap: {targets: [dropCenter]}
 			    });
-			    console.log(dropRect);
-			    console.log(dropCenter);
-
-				// console.log(event.draggable.draggable(	));
 			},
 			ondragleave: function(event){
 				event.draggable.draggable({

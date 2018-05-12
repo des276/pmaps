@@ -7,6 +7,15 @@ a {
   color: #00B7FF;
 }
 
+svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 #object_container {
 	border-color: black;
 	border-width: 1px;
