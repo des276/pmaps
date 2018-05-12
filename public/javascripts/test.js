@@ -90,7 +90,47 @@ $(function() {
 
 	console.log('width: ' + getContainerWidth('object_container'));
 	console.log('height: ' + getContainerHeight('object_container'));
+
+// Button for adding in the horizontal direction
+
+var horzCount = 0;
+$('.button_horizontal').click(function () {
+	// window.alert("button works");
+	// console.log("button press");
+
+	
+	  	horzCount++
+		$("#object_container").append('<div class="dropzone first" id="hDropzone_' + horzCount + '">');
+		$('#hDropzone_'+ horzCount).css({top: 1, left: 200 * horzCount, position:'absolute'});
+		//To do 05.11.18/8:13PM | Need to fix how positioning works so that 1) it's cleaner and 2) it's flexible for what line you're on as currently it really just goes off the first anchor div
+
+
+		//To do 05.11.18/8:46PM | id naming is kinda fucked up - need to make it name things by A1, A2, B1, B2 style positions
+		//To do 05.11.18/8:57PM | Unfuck the loop so that it always fills shit out correctly
+		var newCount = 1;
+
+		for(i=0; i < newCount; i++) {
+
+			$("#object_container").append('<div class="dropzone first" id="nDropzone_' + newCount + '">');
+			$('#nDropzone_'+ newCount).css({top: 200 * newCount, left: 200 * horzCount, position:'absolute'});
+		};
+
+		// var newestDropzone = document.getElementById("dropzone_1");
+		// console.log(newestDropzone.getAttribute('class'));
 });
 
+// Button for adding in the vertical direction
 
+var vertCount = 0;
+$('.button_vertical').click(function () {
+	// window.alert("button works");
+	console.log("button press");
 
+  	  	vertCount++
+		$("#object_container").append('<div class="dropzone first" id="vDropzone_' + vertCount + '">');
+		$('#vDropzone_'+ vertCount).css({top: 200 * vertCount, left: 1, position:'absolute'});
+});
+
+console.log($('.dropzone').height());
+
+});
