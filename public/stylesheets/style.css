@@ -40,25 +40,48 @@ a {
 /*Test shit from interact.js*/
 
 .draggable {
-  width: 40px;
-  height: 40px;
+  /*width: 40px ;*/
+  /*height: 40px;*/
   background-color: #29e;
   color: #fff;
   font-size: 0.8em;
   text-align: center;
   display: inline-block; /* I don't know why but this makes the elements stack horizontally at start... Which is nice I guess */
   border-radius: 4px;
-  padding: 2%;
-  margin: 5%;
-  /*position: absolute;*/
+  position: absolute;
+  width: 100px;
+  height: 100px;
 }
 
 .dropzone {
-	width: 80px;
+/*	width: 80px;
 	height: 80px;
 	border: 10px dotted;
-	color: white;
+	color: white;*/
+/*    left: 150px;
+    top: 150px;*/
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    background: white;
+    border: 1px solid #568eb9;
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);  
+    display: inline-block;
 }
+
+.first {left: 150px; top: 150px;};
+.second {left:  500px; top: 150px;};
+
+/*.dropzone:before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%; width: 100%;
+  background: #6dc001;
+
+  transform-origin: center;
+  transform: scale(0);
+}*/
 
 <% end %>
 
