@@ -63,20 +63,23 @@ svg {
 }
 
 .dropzone {
-/*	width: 80px;
-	height: 80px;
-	border: 10px dotted;
-	color: white;*/
-/*    left: 150px;
-    top: 150px;*/
+	/*Temp border just to see the object*/
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	border-color: black;
+	border-width: 1px;
+	border-style: solid;
+
     position: absolute;
-    height: 200px;
-    width: 200px;
+    height: 120px;
+    width: 120px;
     background: white;
     /*border: 1px solid #568eb9;*/
     box-shadow: 0 5px 15px rgba(0,0,0,.2);  
     display: inline-block;
     z-index: -1;
+    box-shadow: none;
 }
 
 /*To do 05.11.18/8:28PM | Fix this as we might not need the .first/.second convention anymore*/

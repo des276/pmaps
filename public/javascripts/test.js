@@ -34,7 +34,6 @@ var init = function(){
 $(function() {
 	init();
 
-
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
 
@@ -129,12 +128,12 @@ $('.button_horizontal').click(function () {
 
 			for(tempCount=0; tempCount <= yCount; tempCount++) {
 				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ tempCount +'">');
-				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: 200 * tempCount, left: 200 * xCount, position:'absolute'});
+				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
 			};
 		} else {
 			//This is just for when you're making the first x row
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});			
+			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 });
 
@@ -150,12 +149,12 @@ $('.button_vertical').click(function () {
 
 			for(tempCount=0; tempCount <= xCount; tempCount++) {
 				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + tempCount + '_y'+ yCount +'">');
-				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * tempCount, position:'absolute'});
+				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
 			};
 		} else {
 			//This is just for when you're making the first y row
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});			
+			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 });
 
