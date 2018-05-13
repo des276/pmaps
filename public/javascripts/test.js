@@ -3,9 +3,28 @@
 // 1) Make sure elements stay within bounds of parent
 // 2) Fix weird behavior; elements sometimes jumping away from cursor
 $(function() {
+	var dropHeight = $('.dropzone.first').height();
+	var dropWidth = $('.dropzone.first').width();
+
 	//add svg element before attaching interact.js handlers
 	var svg = d3.select('svg');
 	var arc = d3.symbol().type(d3.symbolTriangle);
+
+	var line = svg.selectAll('path')
+		.data([{x: (dropHeight/2), y: (dropWidth/2)}])
+		.enter()
+		.append('path')
+		.attr('d', arc)
+		.attr('fill', 'black')
+		.attr('stroke', '#000')
+		.attr('stroke-width', 1)
+		.attr('transform', function(d){
+			return 'translate(' + d.x + ', ' + d.y +')';
+		})
+		.attr('class', 'draggable')
+		.attr('data-x', dropHeight/2)
+		.attr('data-y', dropWidth/2)
+	;
 
 
 	var element = document.getElementsByClassName('.draggable'),
@@ -30,6 +49,8 @@ $(function() {
 	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
 	        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
+	        console.log(event.dx);
+
 
 		    // translate the element
 		    target.style.webkitTransform =
@@ -44,7 +65,7 @@ $(function() {
 
 	interact('.dropzone')
 		.dropzone({
-			overlap: 0.1	,
+			overlap: 0.1,
 			ondragenter: function(event){
 				// console.log(event);
 
