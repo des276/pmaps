@@ -27,10 +27,7 @@ var init = function(){
 	;
 }
 
-// Element movement
-// To dos:
-// 1) Make sure elements stay within bounds of parent
-// 2) Fix weird behavior; elements sometimes jumping away from cursor
+// Draggable element movement function
 $(function() {
 	init();
 
@@ -56,14 +53,10 @@ $(function() {
 	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
 	        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-	        // console.log(event.dx);
-
-
 		    // translate the element
 		    target.style.webkitTransform =
 		    target.style.transform =
 		      'translate(' + x + 'px, ' + y + 'px)';
-
 
 		    // update the posiion attributes
 		    target.setAttribute('data-x', x);
@@ -74,8 +67,6 @@ $(function() {
 		.dropzone({
 			overlap: 0.1,
 			ondragenter: function(event){
-				// console.log(event);
-
 
 				var dropRect = interact.getElementRect(event.target),
 		        dropCenter = {
@@ -109,20 +100,16 @@ $(function() {
 		return $('#' + elName).height();
 	}
 
-	// console.log('width: ' + getContainerWidth('object_container'));
-	// console.log('height: ' + getContainerHeight('object_container'));
-
+//Sets initial row/column counts to 0
 var xCount = 0;
 var yCount = 0;
 
-// Button for adding in the horizontal direction
+// Button function for adding dropzone rows
 $('.button_horizontal').click(function () {
-	// window.alert("button works");
-	// console.log("button press");
-
 	
 	  	xCount++
 
+	  	//For everything after new rows have been added
 	  	if (yCount != 0) {
 			var tempCount = 0;
 
@@ -131,19 +118,18 @@ $('.button_horizontal').click(function () {
 				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
 			};
 		} else {
-			//This is just for when you're making the first x row
+			//For before new rows have been added
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
 			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 });
 
-// Button for adding in the vertical direction
+// Button function for adding dropzone columns
 $('.button_vertical').click(function () {
-	// window.alert("button works");
-	// console.log("button press");
 
 		yCount++
 
+		//For everything after new columns have been added
 	  	if (xCount != 0) {
 			var tempCount = 0;
 
@@ -152,7 +138,7 @@ $('.button_vertical').click(function () {
 				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
 			};
 		} else {
-			//This is just for when you're making the first y row
+			//For before new columns have been added
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
 			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
