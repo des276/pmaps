@@ -123,23 +123,19 @@ $('.button_horizontal').click(function () {
 
 	
 	  	xCount++
-		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});
-		//To do 05.11.18/8:13PM | Need to fix how positioning works so that 1) it's cleaner and 2) it's flexible for what line you're on as currently it really just goes off the first anchor div
 
+	  	if (yCount != 0) {
+			var tempCount = 0;
 
-		//To do 05.11.18/8:46PM | id naming is kinda fucked up - need to make it name things by A1, A2, B1, B2 style positions
-		//To do 05.11.18/8:57PM | Unfuck the loop so that it always fills shit out correctly
-		// var newCount = 1;
-
-		// for(i=0; i < newCount; i++) {
-
-		// 	$("#object_container").append('<div class="dropzone first" id="nDropzone_' + newCount + '">');
-		// 	$('#nDropzone_'+ newCount).css({top: 200 * newCount, left: 200 * xCount, position:'absolute'});
-		// };
-
-		// var newestDropzone = document.getElementById("dropzone_1");
-		// console.log(newestDropzone.getAttribute('class'));
+			for(tempCount=0; tempCount <= yCount; tempCount++) {
+				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ tempCount +'">');
+				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: 200 * tempCount, left: 200 * xCount, position:'absolute'});
+			};
+		} else {
+			//This is just for when you're making the first x row
+			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
+			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});			
+		}
 });
 
 // Button for adding in the vertical direction
@@ -147,12 +143,21 @@ $('.button_vertical').click(function () {
 	// window.alert("button works");
 	// console.log("button press");
 
-  	  	yCount++
-		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});
-});
+		yCount++
 
-// console.log($('.dropzone').height());
+	  	if (xCount != 0) {
+			var tempCount = 0;
+
+			for(tempCount=0; tempCount <= xCount; tempCount++) {
+				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + tempCount + '_y'+ yCount +'">');
+				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * tempCount, position:'absolute'});
+			};
+		} else {
+			//This is just for when you're making the first y row
+			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
+			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});			
+		}
+});
 
 });
 
