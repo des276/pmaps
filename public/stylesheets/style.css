@@ -1,11 +1,27 @@
 body {
-	padding: 50px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 15px;
+	background-color: #F4F4F4;
+}
+
+header {
+	background-color: #1C1C1C;
+	font-color: white;
+	padding: 5px;
+	margin: -15px;
 }
 
 h1 {
 	font-family: 'Roboto', sans-serif;
 	font-size: 40px;
+	color: white;
+}
+
+p {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	color: #1C1C1C;
 }
 
 a {
