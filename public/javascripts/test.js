@@ -1,8 +1,8 @@
-// Element movement
-// To dos:
-// 1) Make sure elements stay within bounds of parent
-// 2) Fix weird behavior; elements sometimes jumping away from cursor
-$(function() {
+/**
+	Create draggable element using svg.
+	Should be first function run before attaching iteract.js handlers
+**/
+var init = function(){
 	var dropHeight = $('.dropzone.first').height();
 	var dropWidth = $('.dropzone.first').width();
 
@@ -25,6 +25,14 @@ $(function() {
 		.attr('data-x', dropHeight/2)
 		.attr('data-y', dropWidth/2)
 	;
+}
+
+// Element movement
+// To dos:
+// 1) Make sure elements stay within bounds of parent
+// 2) Fix weird behavior; elements sometimes jumping away from cursor
+$(function() {
+	init();
 
 
 	var element = document.getElementsByClassName('.draggable'),
@@ -148,3 +156,6 @@ $('.button_vertical').click(function () {
 console.log($('.dropzone').height());
 
 });
+
+
+// init();
