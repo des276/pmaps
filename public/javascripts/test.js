@@ -124,7 +124,7 @@ $('.button_horizontal').click(function () {
 	
 	  	xCount++
 		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 1, left: 200 * xCount, position:'absolute'});
+		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});
 		//To do 05.11.18/8:13PM | Need to fix how positioning works so that 1) it's cleaner and 2) it's flexible for what line you're on as currently it really just goes off the first anchor div
 
 
@@ -149,7 +149,7 @@ $('.button_vertical').click(function () {
 
   	  	yCount++
 		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 1, position:'absolute'});
+		$('#dropzone_x' + xCount + '_y'+ yCount).css({top: 200 * yCount, left: 200 * xCount, position:'absolute'});
 });
 
 // console.log($('.dropzone').height());

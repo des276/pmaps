@@ -69,7 +69,7 @@ svg {
 	color: white;*/
 /*    left: 150px;
     top: 150px;*/
-    position: relative;
+    position: absolute;
     height: 200px;
     width: 200px;
     background: white;
@@ -81,7 +81,7 @@ svg {
 
 /*To do 05.11.18/8:28PM | Fix this as we might not need the .first/.second convention anymore*/
 .first {left: 0px; top: 0px;};
-.second {left:  500px; top: 150px;};
+/*.second {left:  500px; top: 150px;};*/
 
 /*.dropzone:before {
   content: '';
