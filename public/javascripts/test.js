@@ -100,7 +100,37 @@ $(function() {
 		return $('#' + elName).height();
 	}
 
-//Sets initial row/column counts to 0
+//Grid initialization	
+	var initXCount = 0;
+	var initYCount = 0;
+	//Set initial grid size
+	var initRowSize = 3;
+	var initColSize = 7;
+
+	//First for loop expands rows
+	for(initXCount=0; initXCount <= initRowSize; initXCount++) {
+		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + 0 + '_y'+ initXCount +'">');
+		$('#dropzone_x' + 0 + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
+
+			//Second for loop expands columns
+			for(initYCount=0; initYCount <= initColSize; initYCount++) {
+				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + initYCount + '_y'+ initXCount +'">');
+				$('#dropzone_x' + initYCount + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount	, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
+			};
+	};
+
+	//Initialize 2D array
+	var dzPosArray = new Array(initColSize)
+
+	for (i=0; i < initColSize; i++)
+	dzPosArray[i]=new Array(initRowSize)
+
+	console.log(dzPosArray);
+	console.log(dzPosArray[1]);
+
+//To do 05.15.18/8:22PM | The initialization grid function above broke the add columns/rows functions. Need to fix.
+//To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
+//To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
 var xCount = 0;
 var yCount = 0;
 
@@ -122,6 +152,7 @@ $('.button_horizontal').click(function () {
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
 			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
+
 });
 
 // Button function for adding dropzone columns
