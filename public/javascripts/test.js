@@ -113,9 +113,9 @@ $(function() {
 		$('#dropzone_x' + 0 + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
 
 			//Second for loop expands columns
-			for(initYCount=0; initYCount <= initColSize; initYCount++) {
+			for(initYCount=1; initYCount <= initColSize; initYCount++) {
 				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + initYCount + '_y'+ initXCount +'">');
-				$('#dropzone_x' + initYCount + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount	, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
+				$('#dropzone_x' + initYCount + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
 			};
 	};
 
@@ -131,8 +131,8 @@ $(function() {
 //To do 05.15.18/8:22PM | The initialization grid function above broke the add columns/rows functions. Need to fix.
 //To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
-var xCount = 0;
-var yCount = 0;
+var yCount = initRowSize;
+var xCount = initColSize;
 
 // Button function for adding dropzone rows
 $('.button_horizontal').click(function () {
