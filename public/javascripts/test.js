@@ -131,10 +131,10 @@ $(function() {
 //To do 05.15.18/8:22PM | The initialization grid function above broke the add columns/rows functions. Need to fix.
 //To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
-var yCount = initRowSize;
-var xCount = initColSize;
+var yCount = initRowSize; //Keeps track of dropzone grid size in the y direction.
+var xCount = initColSize; //Keeps track of dropzone grid size in the x direction.
 
-// Button function for adding dropzone rows
+//Button function for adding dropzone columns (later this will be triggered by elements nearing the edge, as well as button)
 $('.button_horizontal').click(function () {
 	
 	  	xCount++
@@ -155,7 +155,7 @@ $('.button_horizontal').click(function () {
 
 });
 
-// Button function for adding dropzone columns
+//Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
 $('.button_vertical').click(function () {
 
 		yCount++
@@ -173,6 +173,24 @@ $('.button_vertical').click(function () {
 			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
 			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
+});
+
+//Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
+$('.button_delete_horizontal').click(function () {
+	
+		for(tempCount=0; tempCount <= yCount; tempCount++) {
+			$("#dropzone_x" + xCount + "_y"+ tempCount).remove();
+		}
+		xCount--
+});
+
+//Button function for deleting dropzone rows (later this will be triggered by elements leaving the edge, as well as button)
+$('.button_delete_vertical').click(function () {
+	
+		for(tempCount=0; tempCount <= xCount; tempCount++) {
+			$("#dropzone_x" + tempCount + "_y"+ yCount).remove();
+		}
+		yCount--
 });
 
 });
