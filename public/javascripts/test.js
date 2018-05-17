@@ -25,11 +25,27 @@ var init = function(){
 		.attr('data-x', dropHeight/2)
 		.attr('data-y', dropWidth/2)
 	;
+
+	//box highlight
+	dropzoneHighlight();
+}
+
+function dropzoneHighlight(){
+	$('body') //this is how you do live updates of event listeners
+		.on('mouseover','.dropzone',function(e){
+			$(e.currentTarget).addClass('hoverover');
+		})
+		.on('mouseout', '.dropzone',function(e){
+			$(e.currentTarget).removeClass('hoverover');
+		});
 }
 
 // Draggable element movement function
 $(function() {
 	init();
+
+
+
 
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
@@ -174,6 +190,8 @@ $('.button_vertical').click(function () {
 			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 });
+
+
 
 });
 
