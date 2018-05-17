@@ -121,7 +121,7 @@ $(function() {
 	var initYCount = 0;
 	//Set initial grid size
 	var initRowSize = 3;
-	var initColSize = 7;
+	var initColSize = 11;
 
 	//First for loop expands rows
 	for(initXCount=0; initXCount <= initRowSize; initXCount++) {
