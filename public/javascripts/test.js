@@ -194,19 +194,24 @@ $('.button_vertical').click(function () {
 //Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
 $('.button_delete_horizontal').click(function () {
 	
-		for(tempCount=0; tempCount <= yCount; tempCount++) {
-			$("#dropzone_x" + xCount + "_y"+ tempCount).remove();
+		if(xCount > 0) {
+				for(tempCount=0; tempCount <= yCount; tempCount++) {
+				$("#dropzone_x" + xCount + "_y"+ tempCount).remove();
+			}
+			xCount--
 		}
-		xCount--
+
 });
 
 //Button function for deleting dropzone rows (later this will be triggered by elements leaving the edge, as well as button)
 $('.button_delete_vertical').click(function () {
 	
-		for(tempCount=0; tempCount <= xCount; tempCount++) {
-			$("#dropzone_x" + tempCount + "_y"+ yCount).remove();
+		if(yCount > 0) {
+				for(tempCount=0; tempCount <= xCount; tempCount++) {
+				$("#dropzone_x" + tempCount + "_y"+ yCount).remove();
+			}
+			yCount--
 		}
-		yCount--
 });
 
 });
