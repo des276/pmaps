@@ -3,15 +3,24 @@
 	Should be first function run before attaching iteract.js handlers
 **/
 var init = function(){
-	var dropHeight = $('.dropzone.first').height();
-	var dropWidth = $('.dropzone.first').width();
+	var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
+
+	// var dropHeight = $('.dropzone.first').height();
+	// var dropWidth = $('.dropzone.first').width();
+	var dropHeight = 120;
+	var dropWidth = 120;
 
 	//add svg element before attaching interact.js handlers
 	var svg = d3.select('svg');
 	var arc = d3.symbol().type(d3.symbolTriangle);
 
+	elArr.push({
+		x: dropHeight/2,
+		y: dropWidth/2
+	});
+
 	var line = svg.selectAll('path')
-		.data([{x: (dropHeight/2), y: (dropWidth/2)}])
+		.data(elArr)
 		.enter()
 		.append('path')
 		.attr('d', arc)
@@ -28,6 +37,47 @@ var init = function(){
 
 	//box highlight
 	dropzoneHighlight();
+	createDragElement(dropHeight, dropWidth, elArr);
+}
+
+function createDragElement(dropHeight, dropWidth, elArr){
+	var dragElement = function(e){
+		// console.log(e.target);
+		// console.log($(e.target).css('left'));
+		var left = parseInt($(e.target).css('left'));
+		var top = parseInt($(e.target).css('top'));
+
+		var svg = d3.select('svg');
+		var arc = d3.symbol().type(d3.symbolTriangle);
+
+		elArr.push({
+			x: dropHeight/2,
+			y: dropWidth/2
+		});
+
+		var line = svg.selectAll('path')
+			.data(elArr)
+			.enter()
+			.append('path')
+			.attr('d', arc)
+			.attr('fill', 'black')
+			.attr('stroke', '#000')
+			.attr('stroke-width', 1)
+			.attr('transform', function(d){
+				return 'translate(' + (left+(dropWidth/2)) + ', ' + (top+(dropHeight/2)) +')';
+			})
+			.attr('class', 'draggable')
+			.attr('data-x', (left+(dropWidth/2)))
+			.attr('data-y', (top+(dropHeight/2)))
+		;
+	}
+
+	$('body').on('click', '.dropzone', function(e){
+		dragElement(e);
+		// $(e.currentTarget).
+		// console.log('hi');
+		// console.log(dragElement);
+	})
 }
 
 function dropzoneHighlight(){
