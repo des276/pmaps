@@ -174,14 +174,15 @@ $(function() {
 	var initColSize = 11;
 
 	//First for loop expands rows
+	//To do 05.21.18/7:32PM | I think I flipped my naming for x/y here, but it works, so I'm leaving it for now lol; need to fix.
 	for(initXCount=0; initXCount <= initRowSize; initXCount++) {
-		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + 0 + '_y'+ initXCount +'">');
-		$('#dropzone_x' + 0 + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
+		$("#object_container").append('<div class="dropzone first" data-coord="{x:' + 0 + ',y:'+ initXCount +'}">');
+		$('.dropzone[data-coord="{x:' + 0 + ',y:'+ initXCount +'}"]').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
 
 			//Second for loop expands columns
 			for(initYCount=1; initYCount <= initColSize; initYCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + initYCount + '_y'+ initXCount +'">');
-				$('#dropzone_x' + initYCount + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + initYCount + ',y:'+ initXCount +'}">');
+				$('.dropzone[data-coord="{x:' + initYCount + ',y:'+ initXCount +'}"').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
 			};
 	};
 
@@ -210,14 +211,15 @@ $('.button_horizontal').click(function () {
 			var tempCount = 0;
 
 			for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ tempCount +'">');
-				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ tempCount +'}">');
+				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
 			};
 		} else {
 			//For before new rows have been added
-			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
+			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
+		
 
 });
 
@@ -231,13 +233,13 @@ $('.button_vertical').click(function () {
 			var tempCount = 0;
 
 			for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + tempCount + '_y'+ yCount +'">');
-				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + tempCount + ',y:'+ yCount +'}">');
+				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
 			};
 		} else {
 			//For before new columns have been added
-			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
+			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 });
 
@@ -246,7 +248,7 @@ $('.button_delete_horizontal').click(function () {
 	
 		if(xCount > 0) {
 				for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$("#dropzone_x" + xCount + "_y"+ tempCount).remove();
+				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').remove();
 			}
 			xCount--
 		}
@@ -258,7 +260,7 @@ $('.button_delete_vertical').click(function () {
 	
 		if(yCount > 0) {
 				for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$("#dropzone_x" + tempCount + "_y"+ yCount).remove();
+				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').remove();
 			}
 			yCount--
 		}
