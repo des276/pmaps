@@ -193,7 +193,6 @@ $(function() {
 		dzPosArray[i]=new Array(initRowSize+1);
 	};
 
-//To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
 var yCount = initRowSize; //Keeps track of dropzone grid size in the y direction.
 var xCount = initColSize; //Keeps track of dropzone grid size in the x direction.
