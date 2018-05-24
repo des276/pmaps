@@ -187,15 +187,12 @@ $(function() {
 	};
 
 	//Initialize 2D array
-	var dzPosArray = new Array(initColSize)
+	var dzPosArray = new Array(initColSize+1);
 
-	for (i=0; i < initColSize; i++)
-	dzPosArray[i]=new Array(initRowSize)
+	for (i=0; i < (initColSize+1); i++) {
+		dzPosArray[i]=new Array(initRowSize+1);
+	};
 
-	console.log(dzPosArray);
-	console.log(dzPosArray[1]);
-
-//To do 05.15.18/8:22PM | The initialization grid function above broke the add columns/rows functions. Need to fix.
 //To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
 var yCount = initRowSize; //Keeps track of dropzone grid size in the y direction.
@@ -219,8 +216,13 @@ $('.button_horizontal').click(function () {
 			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
 			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
-		
 
+		//Increase array in the x direction with same size rows in the new x slot
+		dzPosArray.length = xCount+1;
+
+		for (i=xCount; i < (xCount+1); i++) {
+			dzPosArray[i]=new Array(yCount+1);
+		};
 });
 
 //Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
@@ -241,6 +243,11 @@ $('.button_vertical').click(function () {
 			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
 			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
+
+		//Increase array in the y direction
+		for (i=0; i < (xCount+1); i++) {
+			dzPosArray[i].length++;
+		};
 });
 
 //Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
@@ -250,7 +257,11 @@ $('.button_delete_horizontal').click(function () {
 				for(tempCount=0; tempCount <= yCount; tempCount++) {
 				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').remove();
 			}
+
 			xCount--
+
+			//Decrease array in the x direction
+			dzPosArray.length = xCount+1;
 		}
 
 });
@@ -262,6 +273,12 @@ $('.button_delete_vertical').click(function () {
 				for(tempCount=0; tempCount <= xCount; tempCount++) {
 				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').remove();
 			}
+
+		//Decrease array in the y direction
+		for (i=0; i < (xCount+1); i++) {
+			dzPosArray[i].length--;
+		};
+
 			yCount--
 		}
 });
