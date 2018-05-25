@@ -145,6 +145,11 @@ $(function() {
 			    	snap: {targets: [dropCenter]}
 			    });
 			},
+
+			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
+			ondrop: function(event){
+			},
+
 			ondragleave: function(event){
 				event.draggable.draggable({
 					snap: false
