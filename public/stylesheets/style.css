@@ -77,8 +77,8 @@ svg {
 	display: inline-block;
 	border-radius: 4px;
 	position: absolute;
-	width: 100px;
-	height: 100px;
+	/*width: 100px;*/
+	/*height: 100px;*/
   pointer-events: all;
 }
 
@@ -109,6 +109,9 @@ svg {
 
 .first {left: 0px; top: 0px;};
 
+/*button {*/
+  /*display: inline-block;*/
+/*}*/
 <% end %>
 
 
