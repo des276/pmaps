@@ -155,6 +155,11 @@ $(function() {
 			    	snap: {targets: [dropCenter]}
 			    });
 			},
+
+			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
+			ondrop: function(event){
+			},
+
 			ondragleave: function(event){
 				event.draggable.draggable({
 					snap: false
@@ -186,28 +191,25 @@ $(function() {
 	var initColSize = 11;
 
 	//First for loop expands rows
+	//To do 05.21.18/7:32PM | I think I flipped my naming for x/y here, but it works, so I'm leaving it for now lol; need to fix.
 	for(initXCount=0; initXCount <= initRowSize; initXCount++) {
-		$("#object_container").append('<div class="dropzone first" id="dropzone_x' + 0 + '_y'+ initXCount +'">');
-		$('#dropzone_x' + 0 + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
+		$("#object_container").append('<div class="dropzone first" data-coord="{x:' + 0 + ',y:'+ initXCount +'}">');
+		$('.dropzone[data-coord="{x:' + 0 + ',y:'+ initXCount +'}"]').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
 
 			//Second for loop expands columns
 			for(initYCount=1; initYCount <= initColSize; initYCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + initYCount + '_y'+ initXCount +'">');
-				$('#dropzone_x' + initYCount + '_y'+ initXCount).css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + initYCount + ',y:'+ initXCount +'}">');
+				$('.dropzone[data-coord="{x:' + initYCount + ',y:'+ initXCount +'}"').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
 			};
 	};
 
 	//Initialize 2D array
-	var dzPosArray = new Array(initColSize)
+	var dzPosArray = new Array(initColSize+1);
 
-	for (i=0; i < initColSize; i++)
-	dzPosArray[i]=new Array(initRowSize)
+	for (i=0; i < (initColSize+1); i++) {
+		dzPosArray[i]=new Array(initRowSize+1);
+	};
 
-	console.log(dzPosArray);
-	console.log(dzPosArray[1]);
-
-//To do 05.15.18/8:22PM | The initialization grid function above broke the add columns/rows functions. Need to fix.
-//To do 05.15.18/8:28PM | Need to build in the expansion of the array during grid expansion.
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
 var yCount = initRowSize; //Keeps track of dropzone grid size in the y direction.
 var xCount = initColSize; //Keeps track of dropzone grid size in the x direction.
@@ -222,15 +224,21 @@ $('.button_horizontal').click(function () {
 			var tempCount = 0;
 
 			for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ tempCount +'">');
-				$('#dropzone_x' + xCount + '_y'+ tempCount).css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ tempCount +'}">');
+				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
 			};
 		} else {
 			//For before new rows have been added
-			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
+			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
 
+		//Increase array in the x direction with same size rows in the new x slot
+		dzPosArray.length = xCount+1;
+
+		for (i=xCount; i < (xCount+1); i++) {
+			dzPosArray[i]=new Array(yCount+1);
+		};
 });
 
 //Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
@@ -243,14 +251,19 @@ $('.button_vertical').click(function () {
 			var tempCount = 0;
 
 			for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" id="dropzone_x' + tempCount + '_y'+ yCount +'">');
-				$('#dropzone_x' + tempCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
+				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + tempCount + ',y:'+ yCount +'}">');
+				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
 			};
 		} else {
 			//For before new columns have been added
-			$("#object_container").append('<div class="dropzone first" id="dropzone_x' + xCount + '_y'+ yCount +'">');
-			$('#dropzone_x' + xCount + '_y'+ yCount).css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
+			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
 		}
+
+		//Increase array in the y direction
+		for (i=0; i < (xCount+1); i++) {
+			dzPosArray[i].length++;
+		};
 });
 
 //Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
@@ -258,9 +271,13 @@ $('.button_delete_horizontal').click(function () {
 	
 		if(xCount > 0) {
 				for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$("#dropzone_x" + xCount + "_y"+ tempCount).remove();
+				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').remove();
 			}
+
 			xCount--
+
+			//Decrease array in the x direction
+			dzPosArray.length = xCount+1;
 		}
 
 });
@@ -270,8 +287,14 @@ $('.button_delete_vertical').click(function () {
 	
 		if(yCount > 0) {
 				for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$("#dropzone_x" + tempCount + "_y"+ yCount).remove();
+				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').remove();
 			}
+
+		//Decrease array in the y direction
+		for (i=0; i < (xCount+1); i++) {
+			dzPosArray[i].length--;
+		};
+
 			yCount--
 		}
 });
