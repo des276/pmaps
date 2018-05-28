@@ -183,26 +183,32 @@ $(function() {
 		return $('#' + elName).height();
 	}
 
+//Grid expansion function
+function gridExpand(xCoord,yCoord){
+	$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCoord + ',y:'+ yCoord +'}">');
+	$('.dropzone[data-coord="{x:' + xCoord + ',y:'+ yCoord +'}"]').css({left: $('.dropzone.first').width() * xCoord, top: $('.dropzone.first').height() * yCoord, position:'absolute'});
+}
+
+//Grid contraction function
+function gridContract(xCoord,yCoord){
+	$('.dropzone[data-coord="{x:' + xCoord + ',y:'+ yCoord +'}"]').remove();
+}
+
 //Grid initialization	
-	var initXCount = 0;
-	var initYCount = 0;
+	var initXCoord = 0;
+	var initYCoord = 0;
 	//Set initial grid size
 	var initRowSize = 3;
 	var initColSize = 11;
 
 	//First for loop expands rows
-	//To do 05.21.18/7:32PM | I think I flipped my naming for x/y here, but it works, so I'm leaving it for now lol; need to fix.
-	for(initXCount=0; initXCount <= initRowSize; initXCount++) {
-		$("#object_container").append('<div class="dropzone first" data-coord="{x:' + 0 + ',y:'+ initXCount +'}">');
-		$('.dropzone[data-coord="{x:' + 0 + ',y:'+ initXCount +'}"]').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * 0, position:'absolute'});
-
+	for(initYCoord=0; initYCoord <= initRowSize; initYCoord++) {
+		gridExpand(0,initYCoord);
 			//Second for loop expands columns
-			for(initYCount=1; initYCount <= initColSize; initYCount++) {
-				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + initYCount + ',y:'+ initXCount +'}">');
-				$('.dropzone[data-coord="{x:' + initYCount + ',y:'+ initXCount +'}"').css({top: $('.dropzone.first').height() * initXCount, left: $('.dropzone.first').width() * initYCount, position:'absolute'});
+			for(initXCoord=1; initXCoord <= initColSize; initXCoord++) {
+				gridExpand(initXCoord,initYCoord);
 			};
 	};
-
 	//Initialize 2D array
 	var dzPosArray = new Array(initColSize+1);
 
@@ -211,95 +217,72 @@ $(function() {
 	};
 
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
-var yCount = initRowSize; //Keeps track of dropzone grid size in the y direction.
-var xCount = initColSize; //Keeps track of dropzone grid size in the x direction.
+var xDZCoord = initColSize; //Keeps track of dropzone grid size in the x direction.
+var yDZCoord = initRowSize; //Keeps track of dropzone grid size in the y direction.
 
 //Button function for adding dropzone columns (later this will be triggered by elements nearing the edge, as well as button)
 $('.button_horizontal').click(function () {
-	
-	  	xCount++
-
+	  	xDZCoord++
 	  	//For everything after new rows have been added
-	  	if (yCount != 0) {
+	  	if (yDZCoord != 0) {
 			var tempCount = 0;
-
-			for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ tempCount +'}">');
-				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').css({top: $('.dropzone.first').height() * tempCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});
+			for(tempCount=0; tempCount <= yDZCoord; tempCount++) {
+				gridExpand(xDZCoord,tempCount);
 			};
 		} else {
 			//For before new rows have been added
-			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
-			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			gridExpand(xDZCoord,yDZCoord);
 		}
-
 		//Increase array in the x direction with same size rows in the new x slot
-		dzPosArray.length = xCount+1;
-
-		for (i=xCount; i < (xCount+1); i++) {
-			dzPosArray[i]=new Array(yCount+1);
+		dzPosArray.length = xDZCoord+1;
+		for (i=xDZCoord; i < (xDZCoord+1); i++) {
+			dzPosArray[i]=new Array(yDZCoord+1);
 		};
 });
 
 //Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
 $('.button_vertical').click(function () {
-
-		yCount++
-
+		yDZCoord++
 		//For everything after new columns have been added
-	  	if (xCount != 0) {
+	  	if (xDZCoord != 0) {
 			var tempCount = 0;
-
-			for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$("#object_container").append('<div class="dropzone first" data-coord="{x:' + tempCount + ',y:'+ yCount +'}">');
-				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * tempCount, position:'absolute'});
+			for(tempCount=0; tempCount <= xDZCoord; tempCount++) {
+				gridExpand(tempCount,yDZCoord);
 			};
 		} else {
 			//For before new columns have been added
-			$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCount + ',y:'+ yCount +'}">');
-			$('.dropzone[data-coord="{x:' + xCount + ',y:'+ yCount +'}"]').css({top: $('.dropzone.first').height() * yCount, left: $('.dropzone.first').width() * xCount, position:'absolute'});			
+			gridExpand(xDZCoord,yDZCoord);
 		}
-
 		//Increase array in the y direction
-		for (i=0; i < (xCount+1); i++) {
+		for (i=0; i < (xDZCoord+1); i++) {
 			dzPosArray[i].length++;
 		};
 });
 
 //Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
 $('.button_delete_horizontal').click(function () {
-	
-		if(xCount > 0) {
-				for(tempCount=0; tempCount <= yCount; tempCount++) {
-				$('.dropzone[data-coord="{x:' + xCount + ',y:'+ tempCount +'}"]').remove();
+		if(xDZCoord > 0) {
+				for(tempCount=0; tempCount <= yDZCoord; tempCount++) {
+					gridContract(xDZCoord,tempCount);
 			}
-
-			xCount--
-
+			xDZCoord--
 			//Decrease array in the x direction
-			dzPosArray.length = xCount+1;
+			dzPosArray.length = xDZCoord+1;
 		}
-
 });
 
 //Button function for deleting dropzone rows (later this will be triggered by elements leaving the edge, as well as button)
 $('.button_delete_vertical').click(function () {
-	
-		if(yCount > 0) {
-				for(tempCount=0; tempCount <= xCount; tempCount++) {
-				$('.dropzone[data-coord="{x:' + tempCount + ',y:'+ yCount +'}"]').remove();
+		if(yDZCoord > 0) {
+				for(tempCount=0; tempCount <= xDZCoord; tempCount++) {
+					gridContract(tempCount,yDZCoord);
 			}
-
 		//Decrease array in the y direction
-		for (i=0; i < (xCount+1); i++) {
+		for (i=0; i < (xDZCoord+1); i++) {
 			dzPosArray[i].length--;
 		};
-
-			yCount--
+			yDZCoord--
 		}
 });
 
 });
-
-
-// init();
