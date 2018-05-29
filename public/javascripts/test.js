@@ -89,6 +89,15 @@ function createDragElement(dropHeight, dropWidth, elArr){
 	// Click event handler
 	$('body').on('click', '.dropzone', function(e){
 		dragElement(e);
+
+		//Gets coords of clicked DZ for array and el
+		var clickDZxCoord = $(event.target).attr("data-xCoordDZ");
+		var clickDZyCoord = $(event.target).attr("data-yCoordDZ");
+		// console.log(clickDZxCoord + ", " + clickDZyCoord);
+		//To do 05.28.18/7:28PM | Doesn't recognize the array in click event handler function. Need to figure out.
+		// dzPosArr[clickDZxCoord][clickDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+		// console.log(dzPosArr[clickDZxCoord][clickDZyCoord]);
+		//To do 05.28.18/7:30PM | Need to get with Des to figure out how to ID el to pass target DZ coords as attrs
 	})
 }
 
@@ -233,7 +242,6 @@ function gridContract(xCoord,yCoord){
 		dzPosArr[i]=new Array(initRowSize+1);
 	};
 
-//To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
 var xDZCoord = initColSize; //Keeps track of dropzone grid size in the x direction.
 var yDZCoord = initRowSize; //Keeps track of dropzone grid size in the y direction.
 
