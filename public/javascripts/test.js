@@ -160,10 +160,15 @@ $(function() {
 			ondrop: function(event){
 				var tgtDZxCoord = $(event.target).attr("data-xCoord");
 				var tgtDZyCoord = $(event.target).attr("data-yCoord");
-				//console.log("x:" + tgtDZxCoord + ", y:" + tgtDZyCoord);
+				dzPosArray[tgtDZxCoord][tgtDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
 			},
 
 			ondragleave: function(event){
+				//To do 05.28.18/6:04PM | Since ondragleave doesn't just apply to the dz being left, but all that are being hovered over, need to figure out reliable way to reset array to 0 for dz being left.
+				var TESTtgtDZxCoord = $(event.target).attr("data-xCoord"); //TEST
+				var TESTtgtDZyCoord = $(event.target).attr("data-yCoord"); //TEST
+				// console.log(TESTtgtDZxCoord + ', ' + TESTtgtDZyCoord);
+
 				event.draggable.draggable({
 					snap: false
 				});
