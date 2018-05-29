@@ -158,6 +158,9 @@ $(function() {
 
 			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
 			ondrop: function(event){
+				var tgtDZxCoord = $(event.target).attr("data-xCoord");
+				var tgtDZyCoord = $(event.target).attr("data-yCoord");
+				//console.log("x:" + tgtDZxCoord + ", y:" + tgtDZyCoord);
 			},
 
 			ondragleave: function(event){
@@ -185,13 +188,13 @@ $(function() {
 
 //Grid expansion function
 function gridExpand(xCoord,yCoord){
-	$("#object_container").append('<div class="dropzone first" data-coord="{x:' + xCoord + ',y:'+ yCoord +'}">');
-	$('.dropzone[data-coord="{x:' + xCoord + ',y:'+ yCoord +'}"]').css({left: $('.dropzone.first').width() * xCoord, top: $('.dropzone.first').height() * yCoord, position:'absolute'});
+	$("#object_container").append('<div class="dropzone first" data-xCoord=' + xCoord + ' data-yCoord='+ yCoord +'>');
+	$('.dropzone[data-xCoord=' + xCoord + '][data-yCoord='+ yCoord +']').css({left: $('.dropzone.first').width() * xCoord, top: $('.dropzone.first').height() * yCoord, position:'absolute'});
 }
 
 //Grid contraction function
 function gridContract(xCoord,yCoord){
-	$('.dropzone[data-coord="{x:' + xCoord + ',y:'+ yCoord +'}"]').remove();
+	$('.dropzone[data-xCoord=' + xCoord + '][data-yCoord='+ yCoord +']').remove();
 }
 
 //Grid initialization	
