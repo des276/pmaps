@@ -160,14 +160,13 @@ $(function() {
 			ondrop: function(event){
 				var dropDZxCoord = $(event.target).attr("data-xCoordDZ");
 				var dropDZyCoord = $(event.target).attr("data-yCoordDZ");
-				dzPosArray[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+				dzPosArr[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
 
 				//Gives the el attributes reflecting its current x/y position
 				$(event.draggable).attr("data-xCoordEl",dropDZxCoord);
 				$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
 
 				elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
-				console.log(elDZtraverseCount);
 			},
 
 			ondragleave: function(event){
@@ -176,7 +175,7 @@ $(function() {
 				if(elDZtraverseCount==1){
 					var leaveDZxCoord = $(event.target).attr("data-xCoordDZ");
 					var leaveDZyCoord = $(event.target).attr("data-yCoordDZ");
-					dzPosArray[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
+					dzPosArr[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
 				}
 
 				event.draggable.draggable({
@@ -228,10 +227,10 @@ function gridContract(xCoord,yCoord){
 			};
 	};
 	//Initialize 2D array
-	var dzPosArray = new Array(initColSize+1);
+	var dzPosArr = new Array(initColSize+1);
 
 	for (i=0; i < (initColSize+1); i++) {
-		dzPosArray[i]=new Array(initRowSize+1);
+		dzPosArr[i]=new Array(initRowSize+1);
 	};
 
 //To do 05.15.18/8:29PM | Need to make more descriptive variable names here.
@@ -252,9 +251,9 @@ $('.button_horizontal').click(function () {
 			gridExpand(xDZCoord,yDZCoord);
 		}
 		//Increase array in the x direction with same size rows in the new x slot
-		dzPosArray.length = xDZCoord+1;
+		dzPosArr.length = xDZCoord+1;
 		for (i=xDZCoord; i < (xDZCoord+1); i++) {
-			dzPosArray[i]=new Array(yDZCoord+1);
+			dzPosArr[i]=new Array(yDZCoord+1);
 		};
 });
 
@@ -273,7 +272,7 @@ $('.button_vertical').click(function () {
 		}
 		//Increase array in the y direction
 		for (i=0; i < (xDZCoord+1); i++) {
-			dzPosArray[i].length++;
+			dzPosArr[i].length++;
 		};
 });
 
@@ -285,7 +284,7 @@ $('.button_delete_horizontal').click(function () {
 			}
 			xDZCoord--
 			//Decrease array in the x direction
-			dzPosArray.length = xDZCoord+1;
+			dzPosArr.length = xDZCoord+1;
 		}
 });
 
@@ -297,7 +296,7 @@ $('.button_delete_vertical').click(function () {
 			}
 		//Decrease array in the y direction
 		for (i=0; i < (xDZCoord+1); i++) {
-			dzPosArray[i].length--;
+			dzPosArr[i].length--;
 		};
 			yDZCoord--
 		}
