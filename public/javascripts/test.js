@@ -105,7 +105,7 @@ function dropzoneHighlight(){
 // Draggable element movement function
 $(function() {
 	init();
-
+	var elDZtraverseCount = 0; //Var to count the number of DZs traversed during ondragleave for purposes of getting the first one
 
 	var element = document.getElementsByClassName('.draggable'),
 	    x = 0, y = 0;
@@ -158,20 +158,26 @@ $(function() {
 
 			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
 			ondrop: function(event){
-				var tgtDZxCoord = $(event.target).attr("data-xCoordDZ");
-				var tgtDZyCoord = $(event.target).attr("data-yCoordDZ");
-				dzPosArray[tgtDZxCoord][tgtDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+				var dropDZxCoord = $(event.target).attr("data-xCoordDZ");
+				var dropDZyCoord = $(event.target).attr("data-yCoordDZ");
+				dzPosArray[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
 
 				//Gives the el attributes reflecting its current x/y position
-				$(event.draggable).attr("data-xCoordEl",tgtDZxCoord);
-				$(event.draggable).attr("data-yCoordEl",tgtDZyCoord);
+				$(event.draggable).attr("data-xCoordEl",dropDZxCoord);
+				$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
+
+				elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
+				console.log(elDZtraverseCount);
 			},
 
 			ondragleave: function(event){
-				//To do 05.28.18/6:04PM | Since ondragleave doesn't just apply to the dz being left, but all that are being hovered over, need to figure out reliable way to reset array to 0 for dz being left.
-				var TESTtgtDZxCoord = $(event.target).attr("data-xCoordDZ"); //TEST
-				var TESTtgtDZyCoord = $(event.target).attr("data-yCoordDZ"); //TEST
-				// console.log(TESTtgtDZxCoord + ', ' + TESTtgtDZyCoord);
+				elDZtraverseCount++//Counts the number of DZs traversed during ondragleave for purposes of getting the first one
+				//After only the first traversal, gets the dropzone coords
+				if(elDZtraverseCount==1){
+					var leaveDZxCoord = $(event.target).attr("data-xCoordDZ");
+					var leaveDZyCoord = $(event.target).attr("data-yCoordDZ");
+					dzPosArray[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
+				}
 
 				event.draggable.draggable({
 					snap: false
