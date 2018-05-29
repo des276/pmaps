@@ -158,15 +158,19 @@ $(function() {
 
 			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
 			ondrop: function(event){
-				var tgtDZxCoord = $(event.target).attr("data-xCoord");
-				var tgtDZyCoord = $(event.target).attr("data-yCoord");
+				var tgtDZxCoord = $(event.target).attr("data-xCoordDZ");
+				var tgtDZyCoord = $(event.target).attr("data-yCoordDZ");
 				dzPosArray[tgtDZxCoord][tgtDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+
+				//Gives the el attributes reflecting its current x/y position
+				$(event.draggable).attr("data-xCoordEl",tgtDZxCoord);
+				$(event.draggable).attr("data-yCoordEl",tgtDZyCoord);
 			},
 
 			ondragleave: function(event){
 				//To do 05.28.18/6:04PM | Since ondragleave doesn't just apply to the dz being left, but all that are being hovered over, need to figure out reliable way to reset array to 0 for dz being left.
-				var TESTtgtDZxCoord = $(event.target).attr("data-xCoord"); //TEST
-				var TESTtgtDZyCoord = $(event.target).attr("data-yCoord"); //TEST
+				var TESTtgtDZxCoord = $(event.target).attr("data-xCoordDZ"); //TEST
+				var TESTtgtDZyCoord = $(event.target).attr("data-yCoordDZ"); //TEST
 				// console.log(TESTtgtDZxCoord + ', ' + TESTtgtDZyCoord);
 
 				event.draggable.draggable({
@@ -193,13 +197,13 @@ $(function() {
 
 //Grid expansion function
 function gridExpand(xCoord,yCoord){
-	$("#object_container").append('<div class="dropzone first" data-xCoord=' + xCoord + ' data-yCoord='+ yCoord +'>');
-	$('.dropzone[data-xCoord=' + xCoord + '][data-yCoord='+ yCoord +']').css({left: $('.dropzone.first').width() * xCoord, top: $('.dropzone.first').height() * yCoord, position:'absolute'});
+	$("#object_container").append('<div class="dropzone first" data-xCoordDZ=' + xCoord + ' data-yCoordDZ='+ yCoord +'>');
+	$('.dropzone[data-xCoordDZ=' + xCoord + '][data-yCoordDZ='+ yCoord +']').css({left: $('.dropzone.first').width() * xCoord, top: $('.dropzone.first').height() * yCoord, position:'absolute'});
 }
 
 //Grid contraction function
 function gridContract(xCoord,yCoord){
-	$('.dropzone[data-xCoord=' + xCoord + '][data-yCoord='+ yCoord +']').remove();
+	$('.dropzone[data-xCoordDZ=' + xCoord + '][data-yCoordDZ='+ yCoord +']').remove();
 }
 
 //Grid initialization	
