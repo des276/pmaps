@@ -30,7 +30,7 @@ function createDragElement(dropHeight, dropWidth, elArr){
 	/**
 		Description:  create a draggable element.  Adds each new object to 'elArr' array
 	**/
-	var dragElement = function(e){
+	var dragElement = function(e,xCoord,yCoord){
 		var left = parseInt($(e.target).css('left'));
 		var top = parseInt($(e.target).css('top'));
 
@@ -83,16 +83,20 @@ function createDragElement(dropHeight, dropWidth, elArr){
 
 		$('#tmp').removeAttr('id');
 
+		target.setAttribute('data-xCoordEl', xCoord);
+	    target.setAttribute('data-yCoordEl', yCoord);
+
 	}
 
 
 	// Click event handler
 	$('body').on('click', '.dropzone', function(e){
-		dragElement(e);
-
 		//Gets coords of clicked DZ for array and el
 		var clickDZxCoord = $(event.target).attr("data-xCoordDZ");
 		var clickDZyCoord = $(event.target).attr("data-yCoordDZ");
+
+		dragElement(e,clickDZxCoord,clickDZyCoord);
+		
 		// console.log(clickDZxCoord + ", " + clickDZyCoord);
 		//To do 05.28.18/7:28PM | Doesn't recognize the array in click event handler function. Need to figure out.
 		// dzPosArr[clickDZxCoord][clickDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
