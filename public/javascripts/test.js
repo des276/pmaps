@@ -167,6 +167,8 @@ $(function() {
 			    event.draggable.draggable({
 			    	snap: {targets: [dropCenter]}
 			    });
+
+			    $(event.target).addClass('hoverover');
 			},
 
 			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
@@ -180,6 +182,8 @@ $(function() {
 				$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
 
 				elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
+
+				$(event.target).removeClass('hoverover');
 			},
 
 			ondragleave: function(event){
@@ -194,6 +198,8 @@ $(function() {
 				event.draggable.draggable({
 					snap: false
 				});
+
+				$(event.target).removeClass('hoverover');
 			}
 		}).on('click', function(el){
 			// console.log(el);
