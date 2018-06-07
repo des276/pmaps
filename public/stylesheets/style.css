@@ -42,8 +42,8 @@ svg {
 	border-color: black;
 	border-width: 1px;
 	border-style: solid;
-	width: auto;
-	height: 500px;
+	/*width: auto;*/
+	/*height: 500px;*/
   pointer-events: none;
 }
 
@@ -52,10 +52,15 @@ svg {
 	position: relative;
 	margin: 10px;
 	z-index: 999;
-	width: 100%;
+	/*width: 100%;*/
 }
 
-#object_container_overlay:after {
+#button_container {
+	width: 100%;
+	height: auto;
+}
+
+/*#object_container_overlay:after {
 	content: '';
 	position: absolute;
 	height: 100%;
@@ -67,7 +72,7 @@ svg {
 	background-color: rgba(255, 0, 0, 0.2);
 	padding: 1px;
 	z-index: -999;
-}
+}*/
 
 .draggable {
 	background-color: #29e;
@@ -84,12 +89,12 @@ svg {
 
 .dropzone {
 	/*Temp inner border just to see the dropzones during dev*/
-	box-sizing: border-box;
+/*	box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 	border-color: black;
 	border-width: 1px;
-	border-style: solid;
+	border-style: solid;*/
 
     position: absolute;
     height: 120px;
