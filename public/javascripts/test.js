@@ -145,6 +145,8 @@ $(function() {
 			inertia: false
 		})
 		.on('dragmove', function (event) {
+			$('.elAnchor').remove(); // remove anchor points mouse over effect on drag
+			
 			var target = event.target,
 	        // keep the dragged position in the data-x/data-y attributes
 	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -159,10 +161,10 @@ $(function() {
 		    target.setAttribute('data-x', x);
 		    target.setAttribute('data-y', y);
 		})
-		.on('click', function(e){
+		.on('mouseover', function(e){
 			var xPos = parseFloat($(e.target).attr('data-x'));
 			var yPos = parseFloat($(e.target).attr('data-y'));
-			var eDims = e.target.getBBox();
+			var bbox = e.target.getBBox();
 			// console.log(eDims);
 			var domPoint = new DOMPoint(e.x, e.y);
 			// domPoint = new SVGPoint();
@@ -187,14 +189,14 @@ $(function() {
 			// var rightAnchorX = 0;
 			// var rightAnchorY = 0;
 			// var counter = 0;
+			// stuff.y = 
+
+			var dX = bbox.x + bbox.width/2;
+			var dY = bbox.y + bbox.height/2;
+			stuff.y = stuff.y + dY;
 			while(e.path[0].isPointInStroke(stuff) != true){
 				stuff.x++;
-				// stuff.y
 			}
-
-			// var bbox = e.target.getBBox();
-			// var dX = bbox.x + bbox.width/2;
-			// var dY = bbox.y + bbox.height/2;
 
 			// stuff = stuff.matrixTransform(e.path[0].getScreenCTM().inverse());
 			// var localToGlobal = (e.path[1].getTransformToElement(e.target).inverse());
@@ -204,31 +206,77 @@ $(function() {
 			// stuff.y = stuff.y - dY;
 			console.log(stuff);
 
-
-
-
-
-			// console.log(e.target.getBBox());
-
 			// var p = e.target.getPathData()[0]
 			// <circle xmlns="http://www.w3.org/2000/svg" id="point-handle" r="10" x="0" y="0" stroke-width="4" fill="#fff" fill-opacity="0.4" stroke="#fff"/>
 			// console.log(e.target.getPathData());
 			// console.log($(e.target).attr('data-x'));
 			// console.log(e);
 			// console.log(d3.select(e).node());
+
+			/** RIGHT ANCHOR **/
 			d3.select('svg')
 				.append('circle')
 				.attr('r', 4.5)
-				.attr("class", "origin")
+				.attr("class", "elAnchor")
 				.attr('fill', 'red')
 				.attr('transform', function(){
 					// console.log(eDims.y);
 					// console.log(eDims.height);
-					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos) +')';
+					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
 				});
+
+			/** LEFT ANCHOR **/
+			d3.select('svg')
+				.append('circle')
+				.attr('r', 4.5)
+				.attr("class", "elAnchor")
+				.attr('fill', 'red')
+				.attr('transform', function(){
+					return 'translate(' + (xPos-stuff.x) + ', ' + (yPos+stuff.y) +')';
+				});
+
+
+			stuff.x = 0;
+			stuff.y = 0;
+			stuff.y = stuff.y + dY;
+			while(e.path[0].isPointInStroke(stuff) != true){
+				// stuff.x++;
+				stuff.y++;
+			}
+
+			/** BOTTOM ANCHOR **/
+			d3.select('svg')
+				.append('circle')
+				.attr('r', 4.5)
+				.attr("class", "elAnchor")
+				.attr('fill', 'red')
+				.attr('transform', function(){
+					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
+			});
+
+			console.log(yPos);
+			console.log(stuff.y);
+
+			stuff.y = 0;
+			stuff.y = stuff.y + dY;
+			while(e.path[0].isPointInStroke(stuff) != true){
+				// stuff.x++;
+				stuff.y--;
+			}
+			/** TOP ANCHOR **/
+			d3.select('svg')
+				.append('circle')
+				.attr('r', 4.5)
+				.attr("class", "elAnchor")
+				.attr('fill', 'red')
+				.attr('transform', function(){
+					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
+			});
 
 			// console.log($('.origin'));
 
+		}).on('mouseout', function(){
+			$('.elAnchor').remove();
 		});
 
 	interact('.dropzone')
