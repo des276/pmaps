@@ -146,7 +146,7 @@ $(function() {
 		})
 		.on('dragmove', function (event) {
 			$('.elAnchor').remove(); // remove anchor points mouse over effect on drag
-			
+
 			var target = event.target,
 	        // keep the dragged position in the data-x/data-y attributes
 	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
