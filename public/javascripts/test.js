@@ -3,11 +3,14 @@
 	Should be first function run before attaching iteract.js handlers
 **/
 var init = function(){
+	SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
+	  return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
+	};
+
 	var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
 
 	// var dropHeight = $('.dropzone')[0].height();
 	// var dropWidth = $('.dropzone')[0].width();
-	// console.log(dropWidth);
 	var dropHeight = 120;
 	var dropWidth = 120;
 	
@@ -45,6 +48,10 @@ function createDragElement(dropHeight, dropWidth, elArr){
 			y: dropWidth/2
 		});
 
+		// var data = [{
+		// 	x: dropHeight/2,
+		// 	y: dropWidth/2
+		// }];
 
 		var line = svg.selectAll('path')
 			.data(elArr)
@@ -63,12 +70,14 @@ function createDragElement(dropHeight, dropWidth, elArr){
 			.attr('data-y', (top+(dropHeight/2)));
 
 
+
 		//FIX centering issue
 		// TODO:  Put this into separate function and call after above is complete.
 		var el = d3.select('#tmp');
 		var bbox = el.node().getBBox();
 		var dX = bbox.x + bbox.width/2;
 		var dY = bbox.y + bbox.height/2;
+		// console.log(dX, dY);
 		var target = document.getElementById('tmp');
 
 		var x = (parseFloat(target.getAttribute('data-x')) || 0) - dX;
@@ -85,7 +94,6 @@ function createDragElement(dropHeight, dropWidth, elArr){
 
 		target.setAttribute('data-xCoordEl', xCoord);
 	    target.setAttribute('data-yCoordEl', yCoord);
-
 	}
 
 
@@ -150,6 +158,77 @@ $(function() {
 		    // update the posiion attributes
 		    target.setAttribute('data-x', x);
 		    target.setAttribute('data-y', y);
+		})
+		.on('click', function(e){
+			var xPos = parseFloat($(e.target).attr('data-x'));
+			var yPos = parseFloat($(e.target).attr('data-y'));
+			var eDims = e.target.getBBox();
+			// console.log(eDims);
+			var domPoint = new DOMPoint(e.x, e.y);
+			// domPoint = new SVGPoint();
+			var stuff = e.path[1].createSVGPoint()
+
+			stuff.x = 0;
+			stuff.y = 0;
+			// console.log(x);
+			// console.log(e.path[1].getScreenCTM().inverse());
+			// x.x = e.clientX;
+			// x.y = e.clientY;
+
+			// x = x.matrixTransform(e.path[1].getScreenCTM().inverse());
+			// var globalToLocal = (e.target.getTransformToElement(e.path[1]).inverse());
+			// // var m = el.getTransformToElement(svg).inverse();
+			// var globalToLocal = dragObject.getTransformToElement(svg).inverse();
+			// var inObjectSpace = x.matrixTransform(globalToLocal);
+			// console.log(inObjectSpace);
+			// console.log(e.path[0].isPointInFill(inObjectSpace));
+
+
+			// var rightAnchorX = 0;
+			// var rightAnchorY = 0;
+			// var counter = 0;
+			while(e.path[0].isPointInStroke(stuff) != true){
+				stuff.x++;
+				// stuff.y
+			}
+
+			// var bbox = e.target.getBBox();
+			// var dX = bbox.x + bbox.width/2;
+			// var dY = bbox.y + bbox.height/2;
+
+			// stuff = stuff.matrixTransform(e.path[0].getScreenCTM().inverse());
+			// var localToGlobal = (e.path[1].getTransformToElement(e.target).inverse());
+			// stuff = stuff.matrixTransform(e.path[1].getScreenCTM().inverse());
+
+			// stuff.x = stuff.x - dX;
+			// stuff.y = stuff.y - dY;
+			console.log(stuff);
+
+
+
+
+
+			// console.log(e.target.getBBox());
+
+			// var p = e.target.getPathData()[0]
+			// <circle xmlns="http://www.w3.org/2000/svg" id="point-handle" r="10" x="0" y="0" stroke-width="4" fill="#fff" fill-opacity="0.4" stroke="#fff"/>
+			// console.log(e.target.getPathData());
+			// console.log($(e.target).attr('data-x'));
+			// console.log(e);
+			// console.log(d3.select(e).node());
+			d3.select('svg')
+				.append('circle')
+				.attr('r', 4.5)
+				.attr("class", "origin")
+				.attr('fill', 'red')
+				.attr('transform', function(){
+					// console.log(eDims.y);
+					// console.log(eDims.height);
+					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos) +')';
+				});
+
+			// console.log($('.origin'));
+
 		});
 
 	interact('.dropzone')
