@@ -1,5 +1,4 @@
 
-
 /**
 	Create draggable element using svg.
 	Should be first function run before attaching iteract.js handlers
@@ -20,6 +19,51 @@ var init = function(){
 	createDragElement(dropHeight, dropWidth, elArr);  //setup dropzone click event handler
 }
 
+//Test code for moving a line with the cursor
+// $(function () {
+
+// 	var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+// 	newLine.setAttribute('id','line2');
+// 	newLine.setAttribute('x1','0');
+// 	newLine.setAttribute('y1','0');
+// 	newLine.setAttribute('x2','200');
+// 	newLine.setAttribute('y2','200');
+// 	// newLine.setAttribute('d',"m 55875 33303 L 82521 33303 82521 68451 109167 68451");
+// 	newLine.setAttribute("stroke", "black")
+// 	$("svg").append(newLine);
+
+
+// 	//Get position of object container
+// 	var objContOffset = $("#object_container").offset();
+
+// 	// (function() {
+// 	//     document.onmousemove = handleMouseMove;
+// 	//     function handleMouseMove(event) {
+// 	//         var dot, eventDoc, doc, body, pageX, pageY;
+
+// 	//         event = event || window.event; // IE-ism
+
+// 	//         // If pageX/Y aren't available and clientX/Y are,
+// 	//         // calculate pageX/Y - logic taken from jQuery.
+// 	//         // (This is to support old IE)
+// 	//         if (event.pageX == null && event.clientX != null) {
+// 	//             eventDoc = (event.target && event.target.ownerDocument) || document;
+// 	//             doc = eventDoc.documentElement;
+// 	//             body = eventDoc.body;
+
+// 	//             event.pageX = event.clientX +
+// 	//               (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+// 	//               (doc && doc.clientLeft || body && body.clientLeft || 0);
+// 	//             event.pageY = event.clientY +
+// 	//               (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+// 	//               (doc && doc.clientTop  || body && body.clientTop  || 0 );
+// 	//         }
+// 	//         $(newLine).attr('x2',event.pageX-objContOffset.left);
+// 	//         $(newLine).attr('y2',event.pageY-objContOffset.top);
+// 	//         // Use event.pageX / event.pageY here
+// 	//     }
+// 	// })();
+// });
 
 function createDragElement(dropHeight, dropWidth, elArr){
 
