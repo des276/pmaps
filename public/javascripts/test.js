@@ -1,3 +1,5 @@
+
+
 /**
 	Create draggable element using svg.
 	Should be first function run before attaching iteract.js handlers
@@ -124,7 +126,7 @@ function dropzoneHighlight(){
 }
 
 // Draggable element movement function
-$(function() {
+$(function() {	
 	init();
 	var elDZtraverseCount = 0; //Var to count the number of DZs traversed during ondragleave for purposes of getting the first one
 
@@ -162,6 +164,10 @@ $(function() {
 		    target.setAttribute('data-y', y);
 		})
 		.on('mouseover', function(e){
+			if($('.elAnchor')[0]){
+				$('#groupAnchors').remove();
+			}
+
 			var xPos = parseFloat($(e.target).attr('data-x'));
 			var yPos = parseFloat($(e.target).attr('data-y'));
 			var bbox = e.target.getBBox();
@@ -172,18 +178,7 @@ $(function() {
 
 			stuff.x = 0;
 			stuff.y = 0;
-			// console.log(x);
-			// console.log(e.path[1].getScreenCTM().inverse());
-			// x.x = e.clientX;
-			// x.y = e.clientY;
-
-			// x = x.matrixTransform(e.path[1].getScreenCTM().inverse());
-			// var globalToLocal = (e.target.getTransformToElement(e.path[1]).inverse());
-			// // var m = el.getTransformToElement(svg).inverse();
-			// var globalToLocal = dragObject.getTransformToElement(svg).inverse();
-			// var inObjectSpace = x.matrixTransform(globalToLocal);
-			// console.log(inObjectSpace);
-			// console.log(e.path[0].isPointInFill(inObjectSpace));
+			
 
 
 			// var rightAnchorX = 0;
@@ -198,26 +193,17 @@ $(function() {
 				stuff.x++;
 			}
 
-			// stuff = stuff.matrixTransform(e.path[0].getScreenCTM().inverse());
-			// var localToGlobal = (e.path[1].getTransformToElement(e.target).inverse());
-			// stuff = stuff.matrixTransform(e.path[1].getScreenCTM().inverse());
 
-			// stuff.x = stuff.x - dX;
-			// stuff.y = stuff.y - dY;
-			console.log(stuff);
-
-			// var p = e.target.getPathData()[0]
-			// <circle xmlns="http://www.w3.org/2000/svg" id="point-handle" r="10" x="0" y="0" stroke-width="4" fill="#fff" fill-opacity="0.4" stroke="#fff"/>
-			// console.log(e.target.getPathData());
-			// console.log($(e.target).attr('data-x'));
-			// console.log(e);
-			// console.log(d3.select(e).node());
+			var groupIt = d3.select('svg')
+				.append('g')
+				.attr('id', 'groupAnchors');
 
 			/** RIGHT ANCHOR **/
-			d3.select('svg')
+			groupIt
 				.append('circle')
 				.attr('r', 4.5)
 				.attr("class", "elAnchor")
+				.attr("id", "rightAnchor")
 				.attr('fill', 'red')
 				.attr('transform', function(){
 					// console.log(eDims.y);
@@ -226,10 +212,11 @@ $(function() {
 				});
 
 			/** LEFT ANCHOR **/
-			d3.select('svg')
+			groupIt
 				.append('circle')
 				.attr('r', 4.5)
 				.attr("class", "elAnchor")
+				.attr("id", "leftAnchor")
 				.attr('fill', 'red')
 				.attr('transform', function(){
 					return 'translate(' + (xPos-stuff.x) + ', ' + (yPos+stuff.y) +')';
@@ -240,43 +227,59 @@ $(function() {
 			stuff.y = 0;
 			stuff.y = stuff.y + dY;
 			while(e.path[0].isPointInStroke(stuff) != true){
-				// stuff.x++;
 				stuff.y++;
 			}
 
 			/** BOTTOM ANCHOR **/
-			d3.select('svg')
+			groupIt
 				.append('circle')
 				.attr('r', 4.5)
 				.attr("class", "elAnchor")
+				.attr("id", "bottomAnchor")
 				.attr('fill', 'red')
 				.attr('transform', function(){
 					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
 			});
 
-			console.log(yPos);
-			console.log(stuff.y);
 
 			stuff.y = 0;
 			stuff.y = stuff.y + dY;
 			while(e.path[0].isPointInStroke(stuff) != true){
-				// stuff.x++;
 				stuff.y--;
 			}
 			/** TOP ANCHOR **/
-			d3.select('svg')
+			groupIt
 				.append('circle')
+				// .remove()
 				.attr('r', 4.5)
 				.attr("class", "elAnchor")
+				.attr("id", "topAnchor")
 				.attr('fill', 'red')
+				.attr('point-events', 'visible')
 				.attr('transform', function(){
 					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
-			});
+				});
 
-			// console.log($('.origin'));
 
-		}).on('mouseout', function(){
-			$('.elAnchor').remove();
+  			// Anchor click handlers
+  			$('.elAnchor').on('click', function(){
+  				console.log('hi');
+  			}).on('mouseout', function(e){ //anchor mouseout should remove anchor points
+  				if(e.toElement != null){
+  					if((e.toElement.getAttribute('class')).indexOf('dropzone') == -1 || (e.toElement.getAttribute('class')).indexOf('elAnchor') == -1){
+  						$('#groupAnchors').remove();
+  					}
+  				}
+  			});
+
+
+
+		}).on('mouseout', function(e){ //mouseout from element should remove anchor points
+			if(e.toElement != null){
+				if(e.toElement.getAttribute('class') != 'elAnchor'){
+					$('#groupAnchors').remove();
+				}
+			}
 		});
 
 	interact('.dropzone')

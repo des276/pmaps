@@ -35,7 +35,7 @@ svg {
 	position: absolute;
 	top: 0;
 	left: 0;
-  pointer-events: none;
+  	pointer-events: none;
 }
 
 #object_container {
@@ -44,7 +44,7 @@ svg {
 	border-style: solid;
 	/*width: auto;*/
 	/*height: 500px;*/
-  pointer-events: none;
+  	pointer-events: none;
 }
 
 #object_container_overlay {
@@ -58,6 +58,12 @@ svg {
 #button_container {
 	width: 100%;
 	height: auto;
+}
+
+.elAnchor {
+	/*cursor: pointer;*/
+	pointer-events: visiblePainted;
+	/*position: relative;*/
 }
 
 /*#object_container_overlay:after {
@@ -104,7 +110,7 @@ svg {
     display: inline-block;
     z-index: -1;
     box-shadow: none;
-    pointer-events: all;
+    pointer-events: visible;
 }
 
 .dropzone.hoverover {
