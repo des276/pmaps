@@ -1,3 +1,4 @@
+
 /**
 	Create draggable element using svg.
 	Should be first function run before attaching iteract.js handlers
@@ -18,6 +19,51 @@ var init = function(){
 	createDragElement(dropHeight, dropWidth, elArr);  //setup dropzone click event handler
 }
 
+//Test code for moving a line with the cursor
+// $(function () {
+
+// 	var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+// 	newLine.setAttribute('id','line2');
+// 	newLine.setAttribute('x1','0');
+// 	newLine.setAttribute('y1','0');
+// 	newLine.setAttribute('x2','200');
+// 	newLine.setAttribute('y2','200');
+// 	// newLine.setAttribute('d',"m 55875 33303 L 82521 33303 82521 68451 109167 68451");
+// 	newLine.setAttribute("stroke", "black")
+// 	$("svg").append(newLine);
+
+
+// 	//Get position of object container
+// 	var objContOffset = $("#object_container").offset();
+
+// 	// (function() {
+// 	//     document.onmousemove = handleMouseMove;
+// 	//     function handleMouseMove(event) {
+// 	//         var dot, eventDoc, doc, body, pageX, pageY;
+
+// 	//         event = event || window.event; // IE-ism
+
+// 	//         // If pageX/Y aren't available and clientX/Y are,
+// 	//         // calculate pageX/Y - logic taken from jQuery.
+// 	//         // (This is to support old IE)
+// 	//         if (event.pageX == null && event.clientX != null) {
+// 	//             eventDoc = (event.target && event.target.ownerDocument) || document;
+// 	//             doc = eventDoc.documentElement;
+// 	//             body = eventDoc.body;
+
+// 	//             event.pageX = event.clientX +
+// 	//               (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+// 	//               (doc && doc.clientLeft || body && body.clientLeft || 0);
+// 	//             event.pageY = event.clientY +
+// 	//               (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+// 	//               (doc && doc.clientTop  || body && body.clientTop  || 0 );
+// 	//         }
+// 	//         $(newLine).attr('x2',event.pageX-objContOffset.left);
+// 	//         $(newLine).attr('y2',event.pageY-objContOffset.top);
+// 	//         // Use event.pageX / event.pageY here
+// 	//     }
+// 	// })();
+// });
 
 function createDragElement(dropHeight, dropWidth, elArr){
 
@@ -346,8 +392,6 @@ $(function() {
 		return $('#' + elName).height();
 	}
 
-});
-
 //Grid expansion function
 function gridExpand(xCoord,yCoord){
 	$("#object_container").append('<div class="dropzone first" data-xCoordDZ=' + xCoord + ' data-yCoordDZ='+ yCoord +'>');
@@ -367,108 +411,105 @@ function sizeObjCont(xCoord,yCoord){
 	$("#object_container_overlay").css({width: contWidthPx, height: contHeightPx});//Temp; need to get rid of the overlay, but some dependency is causing issues.
 }
 
-//Grid functions
-$(function() {
+//Grid initialization	
+	var initXCoord = 0;
+	var initYCoord = 0;
+	//Set initial grid size
+	var initRowSize = 3;
+	var initColSize = 11;
 
-	//Grid initialization	
-		var initXCoord = 0;
-		var initYCoord = 0;
-		//Set initial grid size
-		var initRowSize = 3;
-		var initColSize = 11;
+	//First for loop expands rows
+	for(initYCoord=0; initYCoord <= initRowSize; initYCoord++) {
+		gridExpand(0,initYCoord);
+			//Second for loop expands columns
+			for(initXCoord=1; initXCoord <= initColSize; initXCoord++) {
+				gridExpand(initXCoord,initYCoord);
+			};
+	};
 
-		//First for loop expands rows
-		for(initYCoord=0; initYCoord <= initRowSize; initYCoord++) {
-			gridExpand(0,initYCoord);
-				//Second for loop expands columns
-				for(initXCoord=1; initXCoord <= initColSize; initXCoord++) {
-					gridExpand(initXCoord,initYCoord);
-				};
+	sizeObjCont(initColSize,initRowSize);
+
+	//Initialize 2D array
+	var dzPosArr = new Array(initColSize+1);
+
+	for (i=0; i < (initColSize+1); i++) {
+		dzPosArr[i]=new Array(initRowSize+1);
+	};
+
+var xDZCoord = initColSize; //Keeps track of dropzone grid size in the x direction.
+var yDZCoord = initRowSize; //Keeps track of dropzone grid size in the y direction.
+
+//Button function for adding dropzone columns (later this will be triggered by elements nearing the edge, as well as button)
+$('.button_horizontal').click(function () {
+	  	xDZCoord++
+	  	//For everything after new rows have been added
+	  	if (yDZCoord != 0) {
+			var tempCount = 0;
+			for(tempCount=0; tempCount <= yDZCoord; tempCount++) {
+				gridExpand(xDZCoord,tempCount);
+			};
+		} else {
+			//For before new rows have been added
+			gridExpand(xDZCoord,yDZCoord);
+		}
+		//Increase array in the x direction with same size rows in the new x slot
+		dzPosArr.length = xDZCoord+1;
+		for (i=xDZCoord; i < (xDZCoord+1); i++) {
+			dzPosArr[i]=new Array(yDZCoord+1);
 		};
 
-		sizeObjCont(initColSize,initRowSize);
+		sizeObjCont(xDZCoord,yDZCoord);
+});
 
-		//Initialize 2D array
-		var dzPosArr = new Array(initColSize+1);
-
-		for (i=0; i < (initColSize+1); i++) {
-			dzPosArr[i]=new Array(initRowSize+1);
+//Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
+$('.button_vertical').click(function () {
+		yDZCoord++
+		//For everything after new columns have been added
+	  	if (xDZCoord != 0) {
+			var tempCount = 0;
+			for(tempCount=0; tempCount <= xDZCoord; tempCount++) {
+				gridExpand(tempCount,yDZCoord);
+			};
+		} else {
+			//For before new columns have been added
+			gridExpand(xDZCoord,yDZCoord);
+		}
+		//Increase array in the y direction
+		for (i=0; i < (xDZCoord+1); i++) {
+			dzPosArr[i].length++;
 		};
 
-	var xDZCoord = initColSize; //Keeps track of dropzone grid size in the x direction.
-	var yDZCoord = initRowSize; //Keeps track of dropzone grid size in the y direction.
+		sizeObjCont(xDZCoord,yDZCoord);
+});
 
-	//Button function for adding dropzone columns (later this will be triggered by elements nearing the edge, as well as button)
-	$('.button_horizontal').click(function () {
-		  	xDZCoord++
-		  	//For everything after new rows have been added
-		  	if (yDZCoord != 0) {
-				var tempCount = 0;
+//Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
+$('.button_delete_horizontal').click(function () {
+		if(xDZCoord > 0) {
 				for(tempCount=0; tempCount <= yDZCoord; tempCount++) {
-					gridExpand(xDZCoord,tempCount);
-				};
-			} else {
-				//For before new rows have been added
-				gridExpand(xDZCoord,yDZCoord);
+					gridContract(xDZCoord,tempCount);
 			}
-			//Increase array in the x direction with same size rows in the new x slot
+			xDZCoord--
+			//Decrease array in the x direction
 			dzPosArr.length = xDZCoord+1;
-			for (i=xDZCoord; i < (xDZCoord+1); i++) {
-				dzPosArr[i]=new Array(yDZCoord+1);
-			};
+		}
 
-			sizeObjCont(xDZCoord,yDZCoord);
-	});
+		sizeObjCont(xDZCoord,yDZCoord);
+});
 
-	//Button function for adding dropzone rows (later this will be triggered by elements nearing the edge, as well as button)
-	$('.button_vertical').click(function () {
-			yDZCoord++
-			//For everything after new columns have been added
-		  	if (xDZCoord != 0) {
-				var tempCount = 0;
+//Button function for deleting dropzone rows (later this will be triggered by elements leaving the edge, as well as button)
+$('.button_delete_vertical').click(function () {
+		if(yDZCoord > 0) {
 				for(tempCount=0; tempCount <= xDZCoord; tempCount++) {
-					gridExpand(tempCount,yDZCoord);
-				};
-			} else {
-				//For before new columns have been added
-				gridExpand(xDZCoord,yDZCoord);
+					gridContract(tempCount,yDZCoord);
 			}
-			//Increase array in the y direction
-			for (i=0; i < (xDZCoord+1); i++) {
-				dzPosArr[i].length++;
-			};
+		//Decrease array in the y direction
+		for (i=0; i < (xDZCoord+1); i++) {
+			dzPosArr[i].length--;
+		};
+			yDZCoord--
+		}
 
-			sizeObjCont(xDZCoord,yDZCoord);
-	});
-
-	//Button function for deleting dropzone columns (later this will be triggered by elements leaving the edge, as well as button)
-	$('.button_delete_horizontal').click(function () {
-			if(xDZCoord > 0) {
-					for(tempCount=0; tempCount <= yDZCoord; tempCount++) {
-						gridContract(xDZCoord,tempCount);
-				}
-				xDZCoord--
-				//Decrease array in the x direction
-				dzPosArr.length = xDZCoord+1;
-			}
-
-			sizeObjCont(xDZCoord,yDZCoord);
-	});
-
-	//Button function for deleting dropzone rows (later this will be triggered by elements leaving the edge, as well as button)
-	$('.button_delete_vertical').click(function () {
-			if(yDZCoord > 0) {
-					for(tempCount=0; tempCount <= xDZCoord; tempCount++) {
-						gridContract(tempCount,yDZCoord);
-				}
-			//Decrease array in the y direction
-			for (i=0; i < (xDZCoord+1); i++) {
-				dzPosArr[i].length--;
-			};
-				yDZCoord--
-			}
-
-			sizeObjCont(xDZCoord,yDZCoord);
-	});
+		sizeObjCont(xDZCoord,yDZCoord);
+});
 
 });
