@@ -1,4 +1,5 @@
 
+var elArr = []; 
 /**
 	Create draggable element using svg.
 	Should be first function run before attaching iteract.js handlers
@@ -8,7 +9,7 @@ var init = function(){
 	  return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
 	};
 
-	var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
+	// var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
 
 	// var dropHeight = $('.dropzone')[0].height();
 	// var dropWidth = $('.dropzone')[0].width();
@@ -206,6 +207,20 @@ $(function() {
 		    // update the posiion attributes
 		    target.setAttribute('data-x', x);
 		    target.setAttribute('data-y', y);
+		})
+		.on('click', function(e){
+			if(e.target){  // see if class 'selected' exists.  If exists, remove selected and stroke outline
+				if((e.toElement.getAttribute('class')).indexOf('selected') != -1){
+					$(e.target).removeClass('selected');
+					$(e.target).attr('stroke', 'black');
+				}else{
+					// add class selected
+					$(e.target).addClass('selected');
+					// change element fill atr to signify selected
+					$(e.target).attr('stroke','red');
+
+				}
+			}
 		})
 		.on('mouseover', function(e){
 			if($('.elAnchor')[0]){
@@ -511,6 +526,18 @@ $('.button_delete_vertical').click(function () {
 		}
 
 		sizeObjCont(xDZCoord,yDZCoord);
+});
+
+//TODO:  Store elements deleted so user can undo
+//TODO:  When we delete elements we need to modify array of elements for interactjs
+$('.delete_elements').click(function(){
+	var numElements = $('.selected').length;
+
+	for(var i=0; i<numElements; i++){
+		elArr.pop();
+	}
+
+	$('.selected').remove();
 });
 
 });
