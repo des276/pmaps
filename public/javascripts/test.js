@@ -116,13 +116,10 @@ function createDragElement(dropHeight, dropWidth, elArr){
 
 		elArr.push({
 			x: dropHeight/2,
-			y: dropWidth/2
+			y: dropWidth/2,
+			test: 'test data'
 		});
 
-		// var data = [{
-		// 	x: dropHeight/2,
-		// 	y: dropWidth/2
-		// }];
 
 		var line = svg.selectAll('path')
 			.data(elArr)
@@ -165,6 +162,7 @@ function createDragElement(dropHeight, dropWidth, elArr){
 
 		target.setAttribute('data-xCoordEl', xCoord);
 	    target.setAttribute('data-yCoordEl', yCoord);
+
 	}
 
 
@@ -174,6 +172,7 @@ function createDragElement(dropHeight, dropWidth, elArr){
 		var clickDZxCoord = $(event.target).attr("data-xCoordDZ");
 		var clickDZyCoord = $(event.target).attr("data-yCoordDZ");
 
+		// console.log(e);
 		dragElement(e,clickDZxCoord,clickDZyCoord);
 		
 		// console.log(clickDZxCoord + ", " + clickDZyCoord);
@@ -216,35 +215,108 @@ $(function() {
 			inertia: false
 		})
 		.on('dragmove', function (event) {
-			$('.elAnchor').remove(); // remove anchor points mouse over effect on drag
 
-			var target = event.target,
-	        // keep the dragged position in the data-x/data-y attributes
-	        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-	        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+			// console.log($('.selected'));
+			var selectedElements = $('.selected');
+			if(selectedElements.length > 0){  // multiple el need to be moved
+				var selectedLen = selectedElements.length;
+				
+				// console.log(event.dx, event.dy);
+				for(var i=0; i<selectedLen; i++){
 
-		    // translate the element
-		    target.style.webkitTransform =
-		    target.style.transform =
-		      'translate(' + x + 'px, ' + y + 'px)';
+					var x = (parseFloat(selectedElements[i].getAttribute('data-x')) || 0) + event.dx;
+					var y = (parseFloat(selectedElements[i].getAttribute('data-y')) || 0) + event.dy;
 
-		    // update the posiion attributes
-		    target.setAttribute('data-x', x);
-		    target.setAttribute('data-y', y);
-		})
-		.on('click', function(e){
-			if(e.target){  // see if class 'selected' exists.  If exists, remove selected and stroke outline
-				if((e.toElement.getAttribute('class')).indexOf('selected') != -1){
-					$(e.target).removeClass('selected');
-					$(e.target).attr('stroke', 'black');
-				}else{
-					// add class selected
-					$(e.target).addClass('selected');
-					// change element fill atr to signify selected
-					$(e.target).attr('stroke','red');
+					// translate the element
+				    selectedElements[i].style.webkitTransform =
+				    selectedElements[i].style.transform =
+				      'translate(' + x + 'px, ' + y + 'px)';
 
+				    // update the posiion attributes
+				    selectedElements[i].setAttribute('data-x', x);
+				    selectedElements[i].setAttribute('data-y', y);
+				}
+			}else{
+
+				// Selected stroke added here for single element click and drag instead of in mouseup/mousedown event handler
+				// Solves having to click to select before being able to drag the element
+				if(event.target){
+					// mousedown selected.  If already selected, don't add class
+					if((event.target.getAttribute('class')).indexOf('selected') == -1){
+						// add class selected
+						$(event.target).addClass('selected');
+						// change element fill atr to signify selected
+						$(event.target).attr('stroke','red');
+					}
 				}
 			}
+
+
+
+			$('.elAnchor').remove(); // remove anchor points mouse over effect on drag
+
+			if((event.target.getAttribute('class')).indexOf('dragging') == -1){ // check if 'dragging' class exists
+				// add dragging class if it doesn't exist already
+				$(event.target).addClass('dragging');
+			}
+
+			// console.log(event.target.getAttribute('class'));
+
+			// var target = event.target,
+	  //       // keep the dragged position in the data-x/data-y attributes
+	  //       x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+	  //       y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+		 //    // translate the element
+		 //    target.style.webkitTransform =
+		 //    target.style.transform =
+		 //      'translate(' + x + 'px, ' + y + 'px)';
+
+		 //    // update the posiion attributes
+		 //    target.setAttribute('data-x', x);
+		 //    target.setAttribute('data-y', y);
+
+		})
+		.on('mousedown mouseup', function(e){
+
+			if(e.type == 'mouseup' && e.target){
+
+
+				// check if selected. If 'dragend' class exists, then it was dragged.
+				if((e.toElement.getAttribute('class')).indexOf('selected') != -1){
+					if((e.target.getAttribute('class')).indexOf('dragend') == -1){ //dragend doesn't exist means it was clicked normally
+						$(e.target).removeClass('selected');
+						$(e.target).attr('stroke', 'black');
+					}
+				}else{
+					// mousedown selected.  If already selected, don't add class
+					if((e.target.getAttribute('class')).indexOf('selected') == -1){
+						// add class selected
+						$(e.target).addClass('selected');
+						// change element fill atr to signify selected
+						$(e.target).attr('stroke','red');
+					}
+				}
+
+				if((e.target.getAttribute('class')).indexOf('dragend') != -1){
+					$(e.target).removeClass('dragend');
+				}
+			}
+
+			// if(e.type == 'mousedown' && e.target){
+			// 	if((e.target.getAttribute('class')).indexOf('selected') != - 1){
+			// 		$(e.target).addClass('selected');
+			// 		$(e.target).attr('stroke', 'red');
+			// 	}
+			// }
+
+		})
+		.on('dragend', function(event){
+			// console.log(event.type);
+		    //ON DRAGEND
+	    	$(event.target).removeClass('dragging');
+	    	$(event.target).addClass('dragend');
+
 		})
 		.on('mouseover', function(e){
 			if($('.elAnchor')[0]){
@@ -262,12 +334,6 @@ $(function() {
 			stuff.x = 0;
 			stuff.y = 0;
 			
-
-
-			// var rightAnchorX = 0;
-			// var rightAnchorY = 0;
-			// var counter = 0;
-			// stuff.y = 
 
 			var dX = bbox.x + bbox.width/2;
 			var dY = bbox.y + bbox.height/2;
@@ -459,8 +525,6 @@ $(function() {
   					}
   				}
   			});
-
-
 
 		}).on('mouseout', function(e){ //mouseout from element should remove anchor points
 			if(e.toElement != null){
