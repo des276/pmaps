@@ -21,50 +21,74 @@ var init = function(){
 }
 
 //Test code for moving a line with the cursor
-// $(function () {
+function createLine(x1,y1,x2,y2){
 
-// 	var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-// 	newLine.setAttribute('id','line2');
-// 	newLine.setAttribute('x1','0');
-// 	newLine.setAttribute('y1','0');
-// 	newLine.setAttribute('x2','200');
-// 	newLine.setAttribute('y2','200');
-// 	// newLine.setAttribute('d',"m 55875 33303 L 82521 33303 82521 68451 109167 68451");
-// 	newLine.setAttribute("stroke", "black")
-// 	$("svg").append(newLine);
+	var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+	newLine.setAttribute('id','line2');
+	newLine.setAttribute('x1','0');
+	newLine.setAttribute('y1','0');
+	newLine.setAttribute('x2','200');
+	newLine.setAttribute('y2','200');
+	// newLine.setAttribute('d',"m 55875 33303 L 82521 33303 82521 68451 109167 68451");
+	newLine.setAttribute("stroke", "black")
+	$("svg").append(newLine);
 
 
-// 	//Get position of object container
-// 	var objContOffset = $("#object_container").offset();
+	//Get position of object container
+	var objContOffset = $("#object_container").offset();
 
-// 	// (function() {
-// 	//     document.onmousemove = handleMouseMove;
-// 	//     function handleMouseMove(event) {
-// 	//         var dot, eventDoc, doc, body, pageX, pageY;
+	(function() {
+	    document.onmousemove = handleMouseMove;
+	    function handleMouseMove(event) {
+	        var dot, eventDoc, doc, body, pageX, pageY;
 
-// 	//         event = event || window.event; // IE-ism
+	        event = event || window.event; // IE-ism
 
-// 	//         // If pageX/Y aren't available and clientX/Y are,
-// 	//         // calculate pageX/Y - logic taken from jQuery.
-// 	//         // (This is to support old IE)
-// 	//         if (event.pageX == null && event.clientX != null) {
-// 	//             eventDoc = (event.target && event.target.ownerDocument) || document;
-// 	//             doc = eventDoc.documentElement;
-// 	//             body = eventDoc.body;
+	        // If pageX/Y aren't available and clientX/Y are,
+	        // calculate pageX/Y - logic taken from jQuery.
+	        // (This is to support old IE)
+	        if (event.pageX == null && event.clientX != null) {
+	            eventDoc = (event.target && event.target.ownerDocument) || document;
+	            doc = eventDoc.documentElement;
+	            body = eventDoc.body;
 
-// 	//             event.pageX = event.clientX +
-// 	//               (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-// 	//               (doc && doc.clientLeft || body && body.clientLeft || 0);
-// 	//             event.pageY = event.clientY +
-// 	//               (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-// 	//               (doc && doc.clientTop  || body && body.clientTop  || 0 );
-// 	//         }
-// 	//         $(newLine).attr('x2',event.pageX-objContOffset.left);
-// 	//         $(newLine).attr('y2',event.pageY-objContOffset.top);
-// 	//         // Use event.pageX / event.pageY here
-// 	//     }
-// 	// })();
-// });
+	            event.pageX = event.clientX +
+	              (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+	              (doc && doc.clientLeft || body && body.clientLeft || 0);
+	            event.pageY = event.clientY +
+	              (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+	              (doc && doc.clientTop  || body && body.clientTop  || 0 );
+	        }
+	        $(newLine).attr('x2',event.pageX-objContOffset.left);
+	        $(newLine).attr('y2',event.pageY-objContOffset.top);
+	        // Use event.pageX / event.pageY here
+	    }
+	})();
+};
+
+// createLine();
+
+//Function to disable text selection on the page.
+jQuery.fn.disableTextSelect = function() {
+	return this.each(function() {
+		$(this).css({
+			'MozUserSelect':'none',
+			'webkitUserSelect':'none'
+		}).attr('unselectable','on').bind('selectstart', function() {
+			return false;
+		});
+	});
+};
+
+//Function to re-enable text selection on the page.
+jQuery.fn.enableTextSelect = function() {
+	return this.each(function() {
+		$(this).css({
+			'MozUserSelect':'',
+			'webkitUserSelect':''
+		}).attr('unselectable','off').unbind('selectstart');
+	});
+};
 
 function createDragElement(dropHeight, dropWidth, elArr){
 
@@ -88,7 +112,7 @@ function createDragElement(dropHeight, dropWidth, elArr){
 		var triArea = (dropHeight*dropWidth)/4;
 
 		var svg = d3.select('svg');
-		var arc = d3.symbol().type(d3.symbolTriangle).size(triArea);
+		var arc = d3.symbol().type(d3.symbolSquare).size(triArea);
 
 		elArr.push({
 			x: dropHeight/2,
@@ -319,10 +343,115 @@ $(function() {
 					return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
 				});
 
+			//In progress function for dragging and drawing line.
+
+			$('.elAnchor').on('mousedown mouseup', function(e){
+				
+				var objContOffset = $("#object_container").offset();
+
+				if(e.type == 'mousedown' && e.target){
+
+					console.log("mousedown");
+
+					$('body').disableTextSelect();
+
+					var firstAnchorRect = interact.getElementRect(event.target);
+					firstAnchorCenter = {
+						x: firstAnchorRect.left + firstAnchorRect.width / 2,
+						y: firstAnchorRect.top + firstAnchorRect.height / 2
+					};
+
+			        var newLine = document.createElementNS('http://www.w3.org/2000/svg','path');
+					newLine.setAttribute('id','line1');
+					newLine.setAttribute('fill','none');
+					newLine.setAttribute("stroke", "black");
+					newLine.setAttribute('stroke-width','2');
+					$("svg").append(newLine);
+					
+						(function() {
+							    document.onmousemove = handleMouseMove;
+							    function handleMouseMove(event) {
+							        var dot, eventDoc, doc, body, pageX, pageY;
+
+							        event = event || window.event; // IE-ism
+
+							        // If pageX/Y aren't available and clientX/Y are,
+							        // calculate pageX/Y - logic taken from jQuery.
+							        // (This is to support old IE)
+							        if (event.pageX == null && event.clientX != null) {
+							            eventDoc = (event.target && event.target.ownerDocument) || document;
+							            doc = eventDoc.documentElement;
+							            body = eventDoc.body;
+
+							            event.pageX = event.clientX +
+							              (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+							              (doc && doc.clientLeft || body && body.clientLeft || 0);
+							            event.pageY = event.clientY +
+							              (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+							              (doc && doc.clientTop  || body && body.clientTop  || 0 );
+							        }
+
+							        var nl1x1 = firstAnchorCenter.x - objContOffset.left;
+							        var nl1y1 = firstAnchorCenter.y - objContOffset.top;
+							        var nl1x2 = ((firstAnchorCenter.x - objContOffset.left)+(event.pageX))/2;
+							        var nl1y2 = firstAnchorCenter.y - objContOffset.top;
+							        var nl1x3 =((firstAnchorCenter.x - objContOffset.left)+(event.pageX))/2;
+							        var nl1y3 = event.pageY - objContOffset.top;
+          							var nl1x4 = event.pageX - objContOffset.left;
+          							var nl1y4 = event.pageY - objContOffset.top;
+
+									$(newLine).attr('d','M ' + nl1x1 +','+nl1y1+' L '+nl1x2 +','+nl1y2+' '+nl1x3 +','+nl1y3+' '+nl1x4 +','+nl1y4);
+							        // Use event.pageX / event.pageY here
+							    }
+							})();
+						}
+
+				if(e.type == 'mouseup' && e.target){
+
+					console.log('mouseup in anchor');
+					$('body').enableTextSelect();
+
+					var secondAnchorRect = interact.getElementRect(event.target);
+
+					secondAnchorCenter = {
+						x: secondAnchorRect.left + secondAnchorRect.width / 2,
+						y: secondAnchorRect.top + secondAnchorRect.height / 2
+					};
+
+					console.log(secondAnchorCenter);
+
+					var nl2x1 = firstAnchorCenter.x - objContOffset.left;
+			        var nl2y1 = firstAnchorCenter.y - objContOffset.top;
+			        var nl2x2 = ((firstAnchorCenter.x - objContOffset.left)+(secondAnchorCenter.x - objContOffset.left))/2;
+			        var nl2y2 = firstAnchorCenter.y - objContOffset.top;
+			        var nl2x3 = ((firstAnchorCenter.x - objContOffset.left)+(secondAnchorCenter.x - objContOffset.left))/2;
+			        var nl2y3 = secondAnchorCenter.y - objContOffset.top;
+					var nl2x4 = secondAnchorCenter.x - objContOffset.left;
+					var nl2y4 = secondAnchorCenter.y - objContOffset.top;
+
+					var newLine2 = document.createElementNS('http://www.w3.org/2000/svg','path');
+					newLine2.setAttribute('id','line2');
+					newLine2.setAttribute('fill','none');
+					newLine2.setAttribute("stroke", "black");
+					newLine2.setAttribute('stroke-width','2');
+					newLine2.setAttribute('d','M ' + nl2x1 +','+nl2y1+' L '+nl2x2 +','+nl2y2+' '+nl2x3 +','+nl2y3+' '+nl2x4 +','+nl2y4);
+					$("svg").append(newLine2);
+
+					$('#line1').remove();
+					console.log(newLine);
+
+				} else {
+					$('body').on('mouseup', function(event){
+						$('#line1').remove();
+					})
+				}
+
+			});
 
   			// Anchor click handlers
-  			$('.elAnchor').on('click', function(){
+  			$('.elAnchor').on('click', function(event){
   				console.log('hi');
+
   			}).on('mouseout', function(e){ //anchor mouseout should remove anchor points
   				if(e.toElement != null){
   					if((e.toElement.getAttribute('class')).indexOf('dropzone') == -1 || (e.toElement.getAttribute('class')).indexOf('elAnchor') == -1){
