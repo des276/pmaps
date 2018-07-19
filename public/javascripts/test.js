@@ -120,9 +120,13 @@ function createDragElement(dropHeight, dropWidth, elArr){
 			test: 'test data'
 		});
 
-
-		var line = svg.selectAll('path')
-			.data(elArr)
+		var line = svg.selectAll()		//'path')
+			// .data(elArr)
+			.data([{
+			x: dropHeight/2,
+			y: dropWidth/2,
+			test: 'test data'
+			}])
 			.enter()
 			.append('path')
 			.attr('d', arc)
@@ -137,7 +141,7 @@ function createDragElement(dropHeight, dropWidth, elArr){
 			.attr('data-x', (left+(dropWidth/2)))
 			.attr('data-y', (top+(dropHeight/2)));
 
-
+			console.log(line);
 
 		//FIX centering issue
 		// TODO:  Put this into separate function and call after above is complete.
@@ -417,8 +421,6 @@ $(function() {
 
 				if(e.type == 'mousedown' && e.target){
 
-					console.log("mousedown");
-
 					$('body').disableTextSelect();
 
 					var firstAnchorRect = interact.getElementRect(event.target);
@@ -474,7 +476,6 @@ $(function() {
 
 				if(e.type == 'mouseup' && e.target){
 
-					console.log('mouseup in anchor');
 					$('body').enableTextSelect();
 
 					var secondAnchorRect = interact.getElementRect(event.target);
@@ -483,8 +484,6 @@ $(function() {
 						x: secondAnchorRect.left + secondAnchorRect.width / 2,
 						y: secondAnchorRect.top + secondAnchorRect.height / 2
 					};
-
-					console.log(secondAnchorCenter);
 
 					var nl2x1 = firstAnchorCenter.x - objContOffset.left;
 			        var nl2y1 = firstAnchorCenter.y - objContOffset.top;
@@ -504,14 +503,12 @@ $(function() {
 					$("svg").append(newLine2);
 
 					$('#line1').remove();
-					console.log(newLine);
 
 				} else {
 					$('body').on('mouseup', function(event){
 						$('#line1').remove();
 					})
 				}
-
 			});
 
   			// Anchor click handlers
