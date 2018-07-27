@@ -1,10 +1,15 @@
 // replacement for ./public/javascripts/test.js
 var test = require('./init.js');
+var dropzone = require('./dropzone.js')
 
 $(function(){
 	// test.getDropDimensions();
 	test.init();
-	console.log(test.getGridCoordinates());
-	// console.log(test.getDropDimensions());
-	// console.log(test.getElArr());
+	dropzone.startGrid();
+	dropzone.initDzArr();
+	dropzone.addXDZ();
+	dropzone.addYDZ();
+	dropzone.deleteXDZ();
+	dropzone.deleteYDZ();
+	dropzone.deleteEls();
 })
