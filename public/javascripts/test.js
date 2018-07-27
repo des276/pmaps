@@ -146,15 +146,15 @@ function createDragElement(dropHeight, dropWidth, elArr){
 	})
 }
 
-function dropzoneHighlight(){
-	$('body') //this is how you do live updates of event listeners
-		.on('mouseover','.dropzone',function(e){
-			$(e.currentTarget).addClass('hoverover');
-		})
-		.on('mouseout', '.dropzone',function(e){
-			$(e.currentTarget).removeClass('hoverover');
-		});
-}
+// function dropzoneHighlight(){
+// 	$('body') //this is how you do live updates of event listeners
+// 		.on('mouseover','.dropzone',function(e){
+// 			$(e.currentTarget).addClass('hoverover');
+// 		})
+// 		.on('mouseout', '.dropzone',function(e){
+// 			$(e.currentTarget).removeClass('hoverover');
+// 		});
+// }
 
 // Draggable element movement function
 $(function() {	

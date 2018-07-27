@@ -19,33 +19,75 @@
 // 	createDragElement(dropHeight, dropWidth, elArr);  //setup dropzone click event handler
 // }
 
+// function dropzoneHighlight(){
+
+// }
+
+
+//grid and drop are the synonymous 
 module.exports = {
 	init: function(){
-		console.log('hi');
-		// getDropDimensions();
-
+		setDropWidth(120);
+		setDropHeight(120);
+		addDropzoneHover();
 	},
-	getDropHeight: function(){
-		// return 
+	getDropDimensions: function(){
+		return dropDims; 
+	},
+	getElArr: function(){
+		return elArr;
+	},
+	getGridCoordinates: function(){
+		return gridInitCoord;
 	}
 }
 
-var dropHeight = 120;
-var dropWidth = 120;
+var elArr = [];
+var dropDims = {
+	dropHeight: 0,
+	dropWidth: 0
+}
+
+var gridInitCoord = {
+	//grid init
+	initXCoord: 0,
+	initYCoord: 0,
+	// set init grid size
+	initRowSize: 0,
+	initColSize: 11
+}
+
+
+
+function addElement(el){
+
+}
 
 function setDropWidth(x){
-	this.dropWidth = x;
+	dropDims.dropWidth = x;
 }
 
 function setDropHeight(x){
-	this.dropHeight = x;
+	dropDims.dropHeight = x;
 }
 
-function getDropDimensions(){
-	// this will calculate screen size and determine dropzone box width and height
-	//set width and height 
-
+function addDropzoneHover(){
+	$('body') //this is how you do live updates of event listeners
+	.on('mouseover','.dropzone',function(e){
+		$(e.currentTarget).addClass('hoverover');
+	})
+	.on('mouseout', '.dropzone',function(e){
+		$(e.currentTarget).removeClass('hoverover');
+	});
 }
+
+
+
+// function getDropDimensions(){
+// 	// this will calculate screen size and determine dropzone box width and height
+// 	//set width and height 
+
+// }
 
 
 
