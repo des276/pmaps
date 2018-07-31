@@ -14,7 +14,7 @@ $(function(){
 	dropzone.deleteEls();
 
 
-	element.init(dropzoneDims.dropHeight, dropzoneDims.dropWidth, initial.getElArr());
+	elemento.init(dropzoneDims.dropHeight, dropzoneDims.dropWidth, initial.getElArr());
 
 
 
