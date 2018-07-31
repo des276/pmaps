@@ -11,6 +11,14 @@ function gridContract(xCoord,yCoord){
 	$('.dropzone[data-xCoordDZ=' + xCoord + '][data-yCoordDZ='+ yCoord +']').remove();
 }
 
+//Container sizing function
+function sizeObjCont(xCoord,yCoord){
+	var contWidthPx = $('.dropzone.first').width() * (xCoord+1);
+	var contHeightPx = $('.dropzone.first').height() * (yCoord+1);
+	$("#object_container").css({width: contWidthPx, height: contHeightPx});
+	$("#object_container_overlay").css({width: contWidthPx, height: contHeightPx});//Temp; need to get rid of the overlay, but some dependency is causing issues.
+}
+
 //Grid initialization	
 var initXCoord = 0;
 var initYCoord = 0;
@@ -38,13 +46,6 @@ var gridInitCoord = {
 // sizeObjCont(initColSize,initRowSize);
 
 module.exports = {
-	//Container sizing function
-	sizeObjCont: function(xCoord,yCoord){
-		var contWidthPx = $('.dropzone.first').width() * (xCoord+1);
-		var contHeightPx = $('.dropzone.first').height() * (yCoord+1);
-		$("#object_container").css({width: contWidthPx, height: contHeightPx});
-		$("#object_container_overlay").css({width: contWidthPx, height: contHeightPx});//Temp; need to get rid of the overlay, but some dependency is causing issues.
-	},
 	//First for loop expands rows
 	startGrid: function(){
 	for(initYCoord=0; initYCoord <= initRowSize; initYCoord++) {
@@ -54,6 +55,7 @@ module.exports = {
 				gridExpand(initXCoord,initYCoord);
 			};
 		}
+		sizeObjCont(initColSize,initRowSize);
 	},
 	//Initialize 2D array
 	initDzArr: function(){
@@ -153,8 +155,6 @@ module.exports = {
 	getGridCoordinates: function(){
 		return gridInitCoord;
 	}
-
-
 }
 
 //TODO:  Store elements deleted so user can undo
