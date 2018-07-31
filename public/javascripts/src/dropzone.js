@@ -33,6 +33,8 @@ var yDZCoord = initRowSize; //Keeps track of dropzone grid size in the y directi
 //Dropzone positioning array
 var dzPosArr = new Array(initColSize+1);
 
+var elDZtraverseCount = 0; //Var to count the number of DZs traversed during ondragleave for purposes of getting the first one
+
 var gridInitCoord = {
 	//grid init
 	initXCoord: 0,
@@ -154,6 +156,32 @@ module.exports = {
 	//get the inital coords so we can size the obj container first.
 	getGridCoordinates: function(){
 		return gridInitCoord;
+	},
+	DZHighlight: function(event){
+		$(event.target).addClass('hoverover');
+	},
+	stopDZHighlight: function(event){
+		$(event.target).removeClass('hoverover');
+	},
+	onDropUpdatePos: function(event){
+		var dropDZxCoord = $(event.target).attr("data-xCoordDZ");
+		var dropDZyCoord = $(event.target).attr("data-yCoordDZ");
+		dzPosArr[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+
+		//Gives the el attributes reflecting its current x/y position
+		$(event.draggable).attr("data-xCoordEl",dropDZxCoord);
+		$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
+
+		elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
+	},
+	onLeaveUpdatePos: function(event){
+		elDZtraverseCount++//Counts the number of DZs traversed during ondragleave for purposes of getting the first one
+		//After only the first traversal, gets the dropzone coords
+		if(elDZtraverseCount==1){
+			var leaveDZxCoord = $(event.target).attr("data-xCoordDZ");
+			var leaveDZyCoord = $(event.target).attr("data-yCoordDZ");
+			dzPosArr[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
+		}
 	}
 }
 

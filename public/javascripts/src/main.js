@@ -13,7 +13,6 @@ $(function(){
 	dropzone.deleteYDZ();
 	dropzone.deleteEls();
 
-
 	elemento.init(dropzoneDims.dropHeight, dropzoneDims.dropWidth, initial.getElArr());
 
 	interact('.draggable')
@@ -42,6 +41,47 @@ $(function(){
 			elemento.elMouseOver(e);
 		}).on('mouseout', function(e){ //mouseout from element should remove anchor points
 			elemento.removeAnchor(e);
+		});
+
+	interact('.dropzone')
+		.dropzone({
+			overlap: 0.1,
+			ondragenter: function(event){
+
+				var dropRect = interact.getElementRect(event.target),
+		        dropCenter = {
+		          x: dropRect.left + dropRect.width  / 2,
+		          y: dropRect.top  + dropRect.height / 2
+		        };
+
+		        // console.log(dropRect);
+			    event.draggable.draggable({
+			    	snap: {targets: [dropCenter]}
+			    });
+
+			    dropzone.DZHighlight(event);
+			    		// $(event.target).addClass('hoverover');
+
+			},
+
+			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
+			ondrop: function(event){
+
+				dropzone.onDropUpdatePos(event);
+				dropzone.stopDZHighlight(event);
+			},
+
+			ondragleave: function(event){
+				dropzone.onLeaveUpdatePos(event);
+
+				event.draggable.draggable({
+					snap: false
+				});
+
+				dropzone.stopDZHighlight(event);
+			}
+		}).on('click', function(el){
+			// console.log(el);
 		});
 
 	
