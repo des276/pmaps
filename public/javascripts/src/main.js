@@ -1,9 +1,12 @@
 var initial = require('./init.js');
-var dropzone = require('./dropzone.js')
+var dropzone = require('./dropzone.js');
 var elemento = require('./element.js');
+var helper = require('./helper.js');
 
 $(function(){
 	initial.init();
+	helper.disableTextWrapper();
+	helper.enableTextWrapper();
 	var dropzoneDims = initial.getDropDimensions();
 	dropzone.startGrid();
 	dropzone.initDzArr();
