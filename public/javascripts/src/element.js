@@ -78,7 +78,7 @@ function dragElement(e, xCoord, yCoord, dropHeight, dropWidth, elArr){
 			.attr('data-x', (left+(dropWidth/2)))
 			.attr('data-y', (top+(dropHeight/2)));
 
-			console.log(line);
+			// console.log(line);
 
 		//FIX centering issue
 		// TODO:  Put this into separate function and call after above is complete.
@@ -109,22 +109,24 @@ function dragMove(event){
 	var selectedElements = $('.selected');
 
 	if(selectedElements.length > 0){  // multiple el need to be moved
-		var selectedLen = selectedElements.length;
-		
-		// console.log(event.dx, event.dy);
-		for(var i=0; i<selectedLen; i++){
+		if((event.target.getAttribute('class')).indexOf('selected') != -1){
+			var selectedLen = selectedElements.length;
+			
+			// console.log(event.dx, event.dy);
+			for(var i=0; i<selectedLen; i++){
 
-			var x = (parseFloat(selectedElements[i].getAttribute('data-x')) || 0) + event.dx;
-			var y = (parseFloat(selectedElements[i].getAttribute('data-y')) || 0) + event.dy;
+				var x = (parseFloat(selectedElements[i].getAttribute('data-x')) || 0) + event.dx;
+				var y = (parseFloat(selectedElements[i].getAttribute('data-y')) || 0) + event.dy;
 
-			// translate the element
-		    selectedElements[i].style.webkitTransform =
-		    selectedElements[i].style.transform =
-		      'translate(' + x + 'px, ' + y + 'px)';
+				// translate the element
+			    selectedElements[i].style.webkitTransform =
+			    selectedElements[i].style.transform =
+			      'translate(' + x + 'px, ' + y + 'px)';
 
-		    // update the posiion attributes
-		    selectedElements[i].setAttribute('data-x', x);
-		    selectedElements[i].setAttribute('data-y', y);
+			    // update the posiion attributes
+			    selectedElements[i].setAttribute('data-x', x);
+			    selectedElements[i].setAttribute('data-y', y);
+			}
 		}
 	}else{
 

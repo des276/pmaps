@@ -43,6 +43,7 @@ $(function(){
 			elemento.removeAnchor(e);
 		});
 
+
 	interact('.dropzone')
 		.dropzone({
 			overlap: 0.1,
