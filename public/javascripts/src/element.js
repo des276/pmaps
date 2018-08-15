@@ -4,6 +4,7 @@ var linejs = require('./line.js');
 module.exports = {
 	init: function(dropHeight, dropWidth, elArr){ //elements mechanics on page load
 		setupClickCreate(dropHeight, dropWidth, elArr);
+		mouseClickBehavior();
 	},
 	dragMove: dragMove,
 	toggleSelection: toggleSelection,
@@ -12,6 +13,9 @@ module.exports = {
 	removeAnchor: removeAnchor
 
 }
+
+
+var clickHandlerEnabled = true;
 
 /**
 	Description:  get center of given element.  allows us to calculate offset.  Bbox is pre-transform values.
@@ -22,9 +26,50 @@ function getMyCentroid(element) {
     return [bbox.x + bbox.width/2, bbox.y + bbox.height/2];
 }
 
+function mouseClickBehavior(){
+
+	$('body') //this is how you do live updates of event listeners
+	.on('mousedown mouseup',function(e){
+		//make sure we don't override button behavior.  If button skip
+		if($(e.target).is("button")){
+			return;
+		}
+		
+		//if not draggable element, then unfocus all selections on page
+		// make sure shiftkey is not pressed
+		// TODO:  for now only interacts with canvas.
+		if((e.target.getAttribute('class')).indexOf('draggable') == -1){ 
+			if(e.shiftKey == false){
+				var pageEls = $('.selected'); // find all selected elements
+
+				if(pageEls.length >= 1){ //if at least 1 element selected, remove select class and disable default click to create behavior
+					
+					clickHandlerEnabled = false;
+					for(var i = 0; i < pageEls.length; i++){
+						$(pageEls[i]).removeClass('selected');
+						$(pageEls[i]).attr('stroke', 'black');
+					}
+				}
+			}else{ //shiftKey is pressed
+				clickHandlerEnabled = false;
+			}
+
+		}
+
+
+	});
+}
+
 function setupClickCreate(dropHeight, dropWidth, elArr){
 	// Click event handler
 	$('body').on('click', '.dropzone', function(e){
+		// if at least 1 element is selected, skip element creation
+
+		if(clickHandlerEnabled == false){
+			clickHandlerEnabled = true;
+			return;
+		}
+
 		//Gets coords of clicked DZ for array and el
 		var clickDZxCoord = $(event.target).attr("data-xCoordDZ");
 		var clickDZyCoord = $(event.target).attr("data-yCoordDZ");
@@ -154,28 +199,117 @@ function dragMove(event){
 }
 
 function toggleSelection(e){
-	if(e.type == 'mouseup' && e.target){
-
-
+	//multi select so skip normal flow of toggleSelection
+	if(e.shiftKey && e.type == 'mouseup'){
 		// check if selected. If 'dragend' class exists, then it was dragged.
-		if((e.toElement.getAttribute('class')).indexOf('selected') != -1){
-			if((e.target.getAttribute('class')).indexOf('dragend') == -1){ //dragend doesn't exist means it was clicked normally
+		// if selected and shiftKey is pressed, then deselect element. otherwise select.
+		if((e.target.getAttribute('class')).indexOf('selected') != -1){
+			if((e.target.getAttribute('class')).indexOf('dragend') == -1){
 				$(e.target).removeClass('selected');
-				$(e.target).attr('stroke', 'black');
+				$(e.target).attr('stroke','black');
 			}
 		}else{
-			// mousedown selected.  If already selected, don't add class
-			if((e.target.getAttribute('class')).indexOf('selected') == -1){
-				// add class selected
+			$(e.target).addClass('selected');
+			$(e.target).attr('stroke','red');
+		}
+
+
+	}else if(e.type == 'mouseup' && e.target){
+		var pageEls = $('.selected');
+
+		if($('.selected').length == 0){ //no elements selected
+			// add class selected
+			$(e.target).addClass('selected');
+			// change element fill atr to signify selected
+			$(e.target).attr('stroke','red');
+		}else if($('.selected').length == 1){ // only 1 element is selected. 
+			//if clicked element is already selected element, toggle off. 
+			//if clicked element isn't selected element, remove selected from other element and select current clicked el
+			if((e.target.getAttribute('class')).indexOf('selected') != -1){
+				// $(e.target).removeClass('selected');
+				// $(e.target).attr('stroke', 'black');
+			}else{
+				$(pageEls[0]).removeClass('selected');
+				$(pageEls[0]).attr('stroke', 'black');
+
 				$(e.target).addClass('selected');
-				// change element fill atr to signify selected
 				$(e.target).attr('stroke','red');
 			}
 		}
+		else{ //1 or more elements selected
+			//keep selection on current element. Remove selection for all other elements
 
-		if((e.target.getAttribute('class')).indexOf('dragend') != -1){
-			$(e.target).removeClass('dragend');
 		}
+	}
+
+	// if($('.selected').length == 0){ //no elements selected
+	// 	if(e.type == 'mouseup' && e.target){
+	// 		// if((e.target.getAttribute('class')).indexOf('dragend') == -1){ //dragend doesn't exist means it was clicked normally
+	// 		// 	$(e.target).removeClass('selected');
+	// 		// 	$(e.target).attr('stroke', 'black');
+	// 		// }
+	// 	}else{
+	// 		// mousedown selected.  If already selected, don't add class
+	// 		if((e.target.getAttribute('class')).indexOf('selected') == -1){
+	// 			// add class selected
+	// 			$(e.target).addClass('selected');
+	// 			// change element fill atr to signify selected
+	// 			$(e.target).attr('stroke','red');
+	// 		}
+	// 	}
+	// }else{ // 1 or more elements selected
+	// 	// if shift key is not pressed, switch focus
+	// 	// remove focus on all elements
+	// 	if(e.type == 'mouseup' && e.target){
+	// 		// if((e.target.getAttribute('class')).indexOf('selected') != -1){ // element is already selected
+	// 		// 	// remove focus
+	// 		// 	$(e.target).removeClass('selected');
+	// 		// 	$(e.target).attr('stroke', 'black');
+	// 		// }
+
+	// 		var pageEl = $('.selected');
+	// 		for(var indEl in pageEl){
+	// 			// console.log(pageEl[indEl]);
+	// 		}
+	// 		// for(var i = 0; i < $('.selected').length; i++){
+	// 		// 	console.log($('.selected')[i]);
+	// 		// 	$($('.selected')[i]).attr('stroke', 'black');
+	// 		// 	$($('.selected')[i]).removeClass('selected');
+				
+	// 		// }
+
+	// 		// add class selected
+	// 		$(e.target).addClass('selected');
+	// 		// change element fill atr to signify selected
+	// 		$(e.target).attr('stroke','red');
+
+	// 	}
+	// }
+
+	// if(e.type == 'mouseup' && e.target){
+	// 	// check if selected. If 'dragend' class exists, then it was dragged.
+	// 	if((e.toElement.getAttribute('class')).indexOf('selected') != -1){
+	// 		if((e.target.getAttribute('class')).indexOf('dragend') == -1){ //dragend doesn't exist means it was clicked normally
+	// 			$(e.target).removeClass('selected');
+	// 			$(e.target).attr('stroke', 'black');
+	// 		}
+	// 	}else{
+	// 		// mousedown selected.  If already selected, don't add class
+	// 		if((e.target.getAttribute('class')).indexOf('selected') == -1){
+	// 			// add class selected
+	// 			$(e.target).addClass('selected');
+	// 			// change element fill atr to signify selected
+	// 			$(e.target).attr('stroke','red');
+	// 		}
+	// 	}
+
+	// 	if((e.target.getAttribute('class')).indexOf('dragend') != -1){
+	// 		$(e.target).removeClass('dragend');
+	// 	}
+	// }
+
+	if((e.target.getAttribute('class')).indexOf('dragend') != -1){
+		$(e.target).removeClass('dragend');
 	}
 
 	// if(e.type == 'mousedown' && e.target){

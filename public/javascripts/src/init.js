@@ -83,6 +83,7 @@ function addDropzoneHover(){
 
 
 
+
 // function getDropDimensions(){
 // 	// this will calculate screen size and determine dropzone box width and height
 // 	//set width and height 
