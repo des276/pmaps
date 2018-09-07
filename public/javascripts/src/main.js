@@ -2,7 +2,7 @@ var initial = require('./init.js');
 var dropzone = require('./dropzone.js');
 var elemento = require('./element.js');
 var helper = require('./helper.js');
-
+ 
 $(function(){
 	initial.init();
 	helper.disableTextWrapper();
