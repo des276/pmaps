@@ -18,6 +18,7 @@ $(function(){
 
 	elemento.init(dropzoneDims.dropHeight, dropzoneDims.dropWidth, initial.getElArr());
 
+
 	interact('.draggable')
 		.draggable({
 			snap: {
@@ -37,14 +38,15 @@ $(function(){
 		.on('mousedown mouseup', function(e){
 			elemento.toggleSelection(e);
 		})
-		.on('dragend', function(event){
-		    elemento.updateDragEndStates(event);
+		.on('dragend', function(e){
+		    elemento.updateDragEndStates(e);
 		})
 		.on('mouseover', function(e){
 			elemento.elMouseOver(e);
 		}).on('mouseout', function(e){ //mouseout from element should remove anchor points
 			elemento.removeAnchor(e);
 		});
+
 
 	interact('.dropzone')
 		.dropzone({

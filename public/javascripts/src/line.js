@@ -86,9 +86,9 @@ function tempLineCreation(){
 					// console.log((event.pageY - objContOffset.top) > (reAnchParRect.top - objContOffset.top));
 					// console.log((event.pageY - objContOffset.top) < (reAnchParRect.bottom - objContOffset.top));
 					// console.log((event.pageX - objContOffset.left) < (reAnchParRect.left - objContOffset.left));
-					console.log(nlXDelta < 0 && (event.pageY - objContOffset.top) < (reAnchParRect.bottom - objContOffset.top) && (event.pageY - objContOffset.top) > (reAnchParRect.top - objContOffset.top) && (event.pageX - objContOffset.left) < (reAnchParRect.left - objContOffset.left))
+					// console.log(nlXDelta < 0 && (event.pageY - objContOffset.top) < (reAnchParRect.bottom - objContOffset.top) && (event.pageY - objContOffset.top) > (reAnchParRect.top - objContOffset.top) && (event.pageX - objContOffset.left) < (reAnchParRect.left - objContOffset.left))
 
-					//To do: 1) Something weird broke for line extending to right where x delta is larger than y delta and 2) the condition for line 121 conflicts with an above condition.
+					//To do: 1) Something weird broke for line extending to right where x delta is larger than y delta and 2) the condition for line 121 conflicts with an above condition
 
 					//Chain these IFs
 					if(startAnchorID == 'rightAnchor'){
