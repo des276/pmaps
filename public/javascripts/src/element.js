@@ -1,4 +1,5 @@
 var linejs = require('./line.js');
+var menujs = require('./menu.js'); // extends d3 functionality
 
 //grid and drop are the synonymous 
 module.exports = {
@@ -10,8 +11,9 @@ module.exports = {
 	toggleSelection: toggleSelection,
 	updateDragEndStates: updateDragEndStates,
 	elMouseOver: elMouseOver,
-	removeAnchor: removeAnchor
-
+	removeAnchor: removeAnchor,
+	elMouseOverMenu: elMouseOverMenu,
+	elMouseOutMenu: elMouseOutMenu
 }
 
 
@@ -153,6 +155,7 @@ function dragElement(e, xCoord, yCoord, dropHeight, dropWidth, elArr){
 }
 
 function dragMove(event){
+	// console.log(event);	
 	var selectedElements = $('.selected');
 
 	if(selectedElements.length > 0){  // multiple el need to be moved
@@ -462,3 +465,65 @@ function removeAnchor(e){
 	}
 }
 
+var control = {};
+var data = [
+        { icon : "https://github.com/favicon.ico", action: "segment 1" },
+        { icon : "https://github.com/favicon.ico", action: "segment 2" },
+        { icon : "https://github.com/favicon.ico", action: "segment 3" },
+        { icon : "https://github.com/favicon.ico", action: "segment 4" }	
+    ];
+
+function elMouseOverMenu(e){
+	d3.select('svg').append('g').attr('id', 'menu-holder');
+
+	var m = new d3.radialMenu()
+				.radius(50)
+				.thickness(30)
+				.appendTo('#menu-holder')
+				.show(data);
+
+	// setTimeout(function(d) {
+	// 	$('#menu-holder').empty();
+ //       // d3.select('#menu-holder').remove();
+ //    }, 2000);
+
+	// $(m).addClass('hello');
+	// console.log(d3.select(m));
+	// console.log(e);
+	// var menu = new d3.radialMenu()
+	// 				.appendTo(e)
+	// 				.show(data)
+
+	// var el = d3.select('#tmp');
+	// 	var bbox = el.node().getBBox();
+	// 	var dX = bbox.x + bbox.width/2;
+	// 	var dY = bbox.y + bbox.height/2;
+	// 	// console.log(dX, dY);
+	// console.log(e);
+		var menu = document.getElementById('menu-holder');
+
+		var dX = 0;
+		var dY = 0;
+		// console.log(e.target.getAttribute('data-x'));
+		var x = (parseFloat(e.target.getAttribute('data-x')) || 0) - dX;
+    	var y = (parseFloat(e.target.getAttribute('data-y')) || 0) - dY;
+		menu.style.webkitTransform ='translate(' + '300 ' + 'px, ' + y + 'px)';
+	    menu.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+	//     // update the posiion attributes
+	    // target.setAttribute('data-x', x);
+	    // target.setAttribute('data-y', y);
+
+	// 	$('#tmp').removeAttr('id');
+
+	// 	target.setAttribute('data-xCoordEl', xCoord);
+	//     target.setAttribute('data-yCoordEl', yCoord);
+
+
+}
+
+function elMouseOutMenu(e){
+	d3.select('#menu-holder').remove();
+	// console.log(e);
+	// $('#menu-holder').empty();
+}

@@ -3,6 +3,7 @@ var dropzone = require('./dropzone.js');
 var elemento = require('./element.js');
 var helper = require('./helper.js');
 
+
 $(function(){
 	initial.init();
 	helper.disableTextWrapper();
@@ -34,6 +35,8 @@ $(function(){
 		})
 		.on('dragmove', function (event) {
 			elemento.dragMove(event);
+
+			//remove mouseover menu if exists
 		})
 		.on('mousedown mouseup', function(e){
 			elemento.toggleSelection(e);
@@ -43,8 +46,10 @@ $(function(){
 		})
 		.on('mouseover', function(e){
 			elemento.elMouseOver(e);
+			elemento.elMouseOverMenu(e);
 		}).on('mouseout', function(e){ //mouseout from element should remove anchor points
 			elemento.removeAnchor(e);
+			elemento.elMouseOutMenu(e);
 		});
 
 
