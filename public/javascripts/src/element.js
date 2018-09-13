@@ -13,7 +13,7 @@ module.exports = {
 	elMouseOver: elMouseOver,
 	removeAnchor: removeAnchor,
 	elMouseOverMenu: elMouseOverMenu,
-	elMouseOutMenu: elMouseOutMenu
+	elMouseOutMenu: elMouseOutMenu,
 	getStartAnchor: getStartAnchor,
 	getEndAnchor: getEndAnchor
 }
