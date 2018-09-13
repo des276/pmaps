@@ -2,52 +2,52 @@
 
 
 
-var elArr = []; 
+// var elArr = []; 
 /**
 	Create draggable element using svg.
 	Should be first function run before attaching iteract.js handlers
 **/
-var init = function(){
-	SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
-	  return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
-	};
+// var init = function(){
+// 	SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
+// 	  return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
+// 	};
 
-	// var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
+// 	// var elArr = []; // store elements in this array.  put this here for now until we figure out object structure.
 
-	// var dropHeight = $('.dropzone')[0].height();
-	// var dropWidth = $('.dropzone')[0].width();
-	var dropHeight = 120;
-	var dropWidth = 120;
+// 	// var dropHeight = $('.dropzone')[0].height();
+// 	// var dropWidth = $('.dropzone')[0].width();
+// 	var dropHeight = 120;
+// 	var dropWidth = 120;
 	
-	// dropzoneHighlight();  //box highlight
-	// createDragElement(dropHeight, dropWidth, elArr);  //setup dropzone click event handler
-}
+// 	// dropzoneHighlight();  //box highlight
+// 	// createDragElement(dropHeight, dropWidth, elArr);  //setup dropzone click event handler
+// }
 
 
 
 // createLine();
 
 //Function to disable text selection on the page.
-jQuery.fn.disableTextSelect = function() {
-	return this.each(function() {
-		$(this).css({
-			'MozUserSelect':'none',
-			'webkitUserSelect':'none'
-		}).attr('unselectable','on').bind('selectstart', function() {
-			return false;
-		});
-	});
-};
+// jQuery.fn.disableTextSelect = function() {
+// 	return this.each(function() {
+// 		$(this).css({
+// 			'MozUserSelect':'none',
+// 			'webkitUserSelect':'none'
+// 		}).attr('unselectable','on').bind('selectstart', function() {
+// 			return false;
+// 		});
+// 	});
+// };
 
-//Function to re-enable text selection on the page.
-jQuery.fn.enableTextSelect = function() {
-	return this.each(function() {
-		$(this).css({
-			'MozUserSelect':'',
-			'webkitUserSelect':''
-		}).attr('unselectable','off').unbind('selectstart');
-	});
-};
+// //Function to re-enable text selection on the page.
+// jQuery.fn.enableTextSelect = function() {
+// 	return this.each(function() {
+// 		$(this).css({
+// 			'MozUserSelect':'',
+// 			'webkitUserSelect':''
+// 		}).attr('unselectable','off').unbind('selectstart');
+// 	});
+// };
 
 // function createDragElement(dropHeight, dropWidth, elArr){
 
@@ -157,9 +157,9 @@ jQuery.fn.enableTextSelect = function() {
 // }
 
 // Draggable element movement function
-$(function() {	
-	init();
-	var elDZtraverseCount = 0; //Var to count the number of DZs traversed during ondragleave for purposes of getting the first one
+// $(function() {	
+// 	init();
+// 	var elDZtraverseCount = 0; //Var to count the number of DZs traversed during ondragleave for purposes of getting the first one
 
 	// var element = document.getElementsByClassName('.draggable'),
 	    // x = 0, y = 0;
@@ -490,58 +490,58 @@ $(function() {
 	// 		}
 	// 	});
 
-	interact('.dropzone')
-		.dropzone({
-			overlap: 0.1,
-			ondragenter: function(event){
+	// interact('.dropzone')
+	// 	.dropzone({
+	// 		overlap: 0.1,
+	// 		ondragenter: function(event){
 
-				var dropRect = interact.getElementRect(event.target),
-		        dropCenter = {
-		          x: dropRect.left + dropRect.width  / 2,
-		          y: dropRect.top  + dropRect.height / 2
-		        };
+	// 			var dropRect = interact.getElementRect(event.target),
+	// 	        dropCenter = {
+	// 	          x: dropRect.left + dropRect.width  / 2,
+	// 	          y: dropRect.top  + dropRect.height / 2
+	// 	        };
 
-		        // console.log(dropRect);
-			    event.draggable.draggable({
-			    	snap: {targets: [dropCenter]}
-			    });
+	// 	        // console.log(dropRect);
+	// 		    event.draggable.draggable({
+	// 		    	snap: {targets: [dropCenter]}
+	// 		    });
 
-			    $(event.target).addClass('hoverover');
-			},
+	// 		    $(event.target).addClass('hoverover');
+	// 		},
 
-			//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
-			ondrop: function(event){
-				var dropDZxCoord = $(event.target).attr("data-xCoordDZ");
-				var dropDZyCoord = $(event.target).attr("data-yCoordDZ");
-				dzPosArr[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
+	// 		//On drop of element for getting target dropzone attributes to pass to element and flip relevant space in array to 1
+	// 		ondrop: function(event){
+	// 			var dropDZxCoord = $(event.target).attr("data-xCoordDZ");
+	// 			var dropDZyCoord = $(event.target).attr("data-yCoordDZ");
+	// 			dzPosArr[dropDZxCoord][dropDZyCoord] = 1; //Sets related position in array to 1, showing it is occupied
 
-				//Gives the el attributes reflecting its current x/y position
-				$(event.draggable).attr("data-xCoordEl",dropDZxCoord);
-				$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
+	// 			//Gives the el attributes reflecting its current x/y position
+	// 			$(event.draggable).attr("data-xCoordEl",dropDZxCoord);
+	// 			$(event.draggable).attr("data-yCoordEl",dropDZyCoord);
 
-				elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
+	// 			elDZtraverseCount = 0;//Resets traversal count to 0 as current traversal has ended
 
-				$(event.target).removeClass('hoverover');
-			},
+	// 			$(event.target).removeClass('hoverover');
+	// 		},
 
-			ondragleave: function(event){
-				elDZtraverseCount++//Counts the number of DZs traversed during ondragleave for purposes of getting the first one
-				//After only the first traversal, gets the dropzone coords
-				if(elDZtraverseCount==1){
-					var leaveDZxCoord = $(event.target).attr("data-xCoordDZ");
-					var leaveDZyCoord = $(event.target).attr("data-yCoordDZ");
-					dzPosArr[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
-				}
+	// 		ondragleave: function(event){
+	// 			elDZtraverseCount++//Counts the number of DZs traversed during ondragleave for purposes of getting the first one
+	// 			//After only the first traversal, gets the dropzone coords
+	// 			if(elDZtraverseCount==1){
+	// 				var leaveDZxCoord = $(event.target).attr("data-xCoordDZ");
+	// 				var leaveDZyCoord = $(event.target).attr("data-yCoordDZ");
+	// 				dzPosArr[leaveDZxCoord][leaveDZyCoord] = 0;//Sets new value to array which el left to zero
+	// 			}
 
-				event.draggable.draggable({
-					snap: false
-				});
+	// 			event.draggable.draggable({
+	// 				snap: false
+	// 			});
 
-				$(event.target).removeClass('hoverover');
-			}
-		}).on('click', function(el){
-			// console.log(el);
-		});
+	// 			$(event.target).removeClass('hoverover');
+	// 		}
+	// 	}).on('click', function(el){
+	// 		// console.log(el);
+	// 	});
 
 	/**
 		param: id (string)

@@ -14,6 +14,8 @@ module.exports = {
 	removeAnchor: removeAnchor,
 	elMouseOverMenu: elMouseOverMenu,
 	elMouseOutMenu: elMouseOutMenu
+	getStartAnchor: getStartAnchor,
+	getEndAnchor: getEndAnchor
 }
 
 
@@ -338,6 +340,8 @@ function elMouseOver(e){
 	var xPos = parseFloat($(e.target).attr('data-x'));
 	var yPos = parseFloat($(e.target).attr('data-y'));
 	var bbox = e.target.getBBox();
+	var anchParRect = JSON.stringify(interact.getElementRect(e.target));
+	// console.log(anchParRect);
 	// console.log(eDims);
 	var domPoint = new DOMPoint(e.x, e.y);
 	// domPoint = new SVGPoint();
@@ -366,6 +370,7 @@ function elMouseOver(e){
 		.attr("class", "elAnchor")
 		.attr("id", "rightAnchor")
 		.attr('fill', 'red')
+		.attr('data',anchParRect)
 		.attr('transform', function(){
 			// console.log(eDims.y);
 			// console.log(eDims.height);
@@ -379,6 +384,7 @@ function elMouseOver(e){
 		.attr("class", "elAnchor")
 		.attr("id", "leftAnchor")
 		.attr('fill', 'red')
+		.attr('data',anchParRect)
 		.attr('transform', function(){
 			return 'translate(' + (xPos-stuff.x) + ', ' + (yPos+stuff.y) +')';
 		});
@@ -398,6 +404,7 @@ function elMouseOver(e){
 		.attr("class", "elAnchor")
 		.attr("id", "bottomAnchor")
 		.attr('fill', 'red')
+		.attr('data',anchParRect)
 		.attr('transform', function(){
 			return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
 	});
@@ -416,6 +423,7 @@ function elMouseOver(e){
 		.attr("class", "elAnchor")
 		.attr("id", "topAnchor")
 		.attr('fill', 'red')
+		.attr('data',anchParRect)
 		.attr('point-events', 'visible')
 		.attr('transform', function(){
 			return 'translate(' + (xPos+stuff.x) + ', ' + (yPos+stuff.y) +')';
@@ -427,15 +435,33 @@ function elMouseOver(e){
 
 		if(e.type == 'mousedown' && e.target){
 
+			//re-eval if we need this here or can delete if moved to line.js
+			getStartAnchor();
+			firstAnchorPos = anchorCentPx(event);
+			
+
 			$('body').disableTextSelect();
 			linejs.tempLineCreation();
 		}
 
 		if(e.type == 'mouseup' && e.target){
 
+			//re-eval if we need this here or can delete if moved to line.js
+			getEndAnchor();
+			
+
+			// console.log(firstAnchorPos.x);
+			// console.log(secondAnchorPos);
+			// console.log(firstAnchorPos.x - secondAnchorPos.x);
+			// console.log(firstAnchorPos.y - secondAnchorPos.y);
+			
+
 			$('body').enableTextSelect();
 
 			linejs.lineCreation();
+
+			secondAnchorPos = anchorCentPx(event);//FYI placing this before linejs.lineCreation() causes that function to fail. Also may not need this in this file
+			console.log(secondAnchorPos);
 
 		} else {
 			$('body').on('mouseup', function(event){
@@ -446,7 +472,7 @@ function elMouseOver(e){
 
 		// Anchor click handlers
 		$('.elAnchor').on('click', function(event){
-			console.log('hi');
+			// console.log('hi');
 
 		}).on('mouseout', function(e){ //anchor mouseout should remove anchor points
 			if(e.toElement != null){
@@ -464,6 +490,7 @@ function removeAnchor(e){
 		}
 	}
 }
+
 
 var control = {};
 var data = [
@@ -524,6 +551,29 @@ function elMouseOverMenu(e){
 
 function elMouseOutMenu(e){
 	d3.select('#menu-holder').remove();
+}
 	// console.log(e);
 	// $('#menu-holder').empty();
+
+function getStartAnchor(){ //May not need this in this file
+	var startAnchorID = $(event.target).attr('id');
+	// console.log('startAnchorID = ' + startAnchorID);
+	return startAnchorID;
+}
+
+function getEndAnchor(){ //May not need this in this file
+	var endAnchorID = $(event.target).attr('id');
+	// console.log('endAnchorID = ' + endAnchorID);
+	return endAnchorID;
+}
+
+function anchorCentPx(event){ //May not need this in this file
+	var firstAnchorRect = interact.getElementRect(event.target);
+
+	firstAnchorCenter = {
+		x: firstAnchorRect.left + firstAnchorRect.width / 2,
+		y: firstAnchorRect.top + firstAnchorRect.height / 2
+	};
+
+	return firstAnchorCenter;
 }
